@@ -9,48 +9,56 @@ import (
 )
 
 type Customer struct {
-	ID         int64
-	RoleID     int32
-	FirstName  string
-	MiddleName pgtype.Text
-	LastName   string
-	Dob        pgtype.Date
-	Mobile     string
-	Email      string
-	Password   string
-	Status     string
-	CreateUser pgtype.Int4
-	ModifyUser pgtype.Int4
-	CreatedAt  pgtype.Timestamptz
-	ModifiedAt pgtype.Timestamptz
+	ID          int64
+	UniqueID    string
+	RoleID      pgtype.Int4
+	FirstName   string
+	MiddleName  pgtype.Text
+	LastName    string
+	Dob         pgtype.Date
+	CountryCode string
+	Phone       string
+	Email       pgtype.Text
+	Salt        pgtype.Text
+	Password    pgtype.Text
+	StatusID    pgtype.Int4
+	CreateUser  int32
+	ModifyUser  pgtype.Int4
+	CreatedAt   pgtype.Timestamptz
+	ModifiedAt  pgtype.Timestamptz
 }
 
 type CustomersAddress struct {
 	ID         int64
-	CustomerID string
+	CustomerID pgtype.Int4
 	Address1   string
-	Address2   string
-	Address3   string
-	Address4   string
+	Address2   pgtype.Text
+	Address3   pgtype.Text
+	Address4   pgtype.Text
 	Location   string
-	StatusID   int32
+	StatusID   pgtype.Int4
+	CreateUser int32
+	ModifyUser pgtype.Int4
 	CreatedAt  pgtype.Timestamptz
 	ModifiedAt pgtype.Timestamptz
 }
 
 type Role struct {
 	RoleID     int32
-	RoleName   string
-	StatusID   int32
+	RoleName   pgtype.Text
+	StatusID   pgtype.Int4
+	CreateUser int32
+	ModifyUser pgtype.Int4
 	CreatedAt  pgtype.Timestamptz
 	ModifiedAt pgtype.Timestamptz
-	Visible    pgtype.Bool
+	Visible    bool
 }
 
 type Status struct {
 	ID         int32
-	Status     string
+	UserStatus string
+	CreateUser int32
+	ModifyUser pgtype.Int4
 	CreatedAt  pgtype.Timestamptz
 	ModifiedAt pgtype.Timestamptz
-	Visible    pgtype.Bool
 }

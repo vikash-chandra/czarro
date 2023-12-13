@@ -1,6 +1,8 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE "status" (
   "id" integer PRIMARY KEY,
-  "status" varchar(20) NOT NULL,
+  "user_status" varchar(20) NOT NULL,
   "create_user" integer NOT NULL DEFAULT 0,
   "modify_user" integer,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
@@ -20,7 +22,7 @@ CREATE TABLE "roles" (
 
 CREATE TABLE "customers" (
   "id" bigserial PRIMARY KEY,
-  "unique_id" uuid NOT NULL,
+  "unique_id" varchar NOT NULL DEFAULT uuid_generate_v4() UNIQUE,
   "role_id" integer,
   "first_name" varchar NOT NULL,
   "middle_name" varchar,
@@ -65,6 +67,8 @@ ALTER TABLE "customers" ADD FOREIGN KEY ("role_id") REFERENCES "roles" ("role_id
 
 ALTER TABLE "customers" ADD FOREIGN KEY ("status_id") REFERENCES "status" ("id");
 
-ALTER TABLE "customers_address" ADD FOREIGN KEY ("customer_id") REFERENCES "customers" ("unique_id");
+INSERT INTO status (id, user_status, create_user) 
+VALUES (1, 'Active', 100);
 
-ALTER TABLE "customers_address" ADD FOREIGN KEY ("status_id") REFERENCES "status" ("id");
+INSERT INTO roles (role_id, role_name, status_id, visible) 
+VALUES (100, 'customer', 1, true);

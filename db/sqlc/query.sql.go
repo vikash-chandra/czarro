@@ -18,28 +18,32 @@ INSERT INTO customers (
   middle_name,
   last_name,
   dob,
-  mobile,
+  country_code,
+  phone,
   email,
+  salt,
   password,
-  status,
+  status_id,
   create_user
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
 )
-RETURNING id, role_id, first_name, middle_name, last_name, dob, mobile, email, password, status, create_user, modify_user, created_at, modified_at
+RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at
 `
 
 type CreateCustomerParams struct {
-	RoleID     int32
-	FirstName  string
-	MiddleName pgtype.Text
-	LastName   string
-	Dob        pgtype.Date
-	Mobile     string
-	Email      string
-	Password   string
-	Status     string
-	CreateUser pgtype.Int4
+	RoleID      pgtype.Int4
+	FirstName   string
+	MiddleName  pgtype.Text
+	LastName    string
+	Dob         pgtype.Date
+	CountryCode string
+	Phone       string
+	Email       pgtype.Text
+	Salt        pgtype.Text
+	Password    pgtype.Text
+	StatusID    pgtype.Int4
+	CreateUser  int32
 }
 
 func (q *Queries) CreateCustomer(ctx context.Context, arg CreateCustomerParams) (Customer, error) {
@@ -49,24 +53,29 @@ func (q *Queries) CreateCustomer(ctx context.Context, arg CreateCustomerParams) 
 		arg.MiddleName,
 		arg.LastName,
 		arg.Dob,
-		arg.Mobile,
+		arg.CountryCode,
+		arg.Phone,
 		arg.Email,
+		arg.Salt,
 		arg.Password,
-		arg.Status,
+		arg.StatusID,
 		arg.CreateUser,
 	)
 	var i Customer
 	err := row.Scan(
 		&i.ID,
+		&i.UniqueID,
 		&i.RoleID,
 		&i.FirstName,
 		&i.MiddleName,
 		&i.LastName,
 		&i.Dob,
-		&i.Mobile,
+		&i.CountryCode,
+		&i.Phone,
 		&i.Email,
+		&i.Salt,
 		&i.Password,
-		&i.Status,
+		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
 		&i.CreatedAt,
@@ -86,7 +95,7 @@ func (q *Queries) DeleteCustomer(ctx context.Context, id int64) error {
 }
 
 const getCustomer = `-- name: GetCustomer :one
-SELECT id, role_id, first_name, middle_name, last_name, dob, mobile, email, password, status, create_user, modify_user, created_at, modified_at FROM customers
+SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM customers
 WHERE id=$1 LIMIT 1
 `
 
@@ -95,15 +104,18 @@ func (q *Queries) GetCustomer(ctx context.Context, id int64) (Customer, error) {
 	var i Customer
 	err := row.Scan(
 		&i.ID,
+		&i.UniqueID,
 		&i.RoleID,
 		&i.FirstName,
 		&i.MiddleName,
 		&i.LastName,
 		&i.Dob,
-		&i.Mobile,
+		&i.CountryCode,
+		&i.Phone,
 		&i.Email,
+		&i.Salt,
 		&i.Password,
-		&i.Status,
+		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
 		&i.CreatedAt,
@@ -113,7 +125,7 @@ func (q *Queries) GetCustomer(ctx context.Context, id int64) (Customer, error) {
 }
 
 const listCustomers = `-- name: ListCustomers :many
-SELECT id, role_id, first_name, middle_name, last_name, dob, mobile, email, password, status, create_user, modify_user, created_at, modified_at FROM customers
+SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM customers
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -135,15 +147,18 @@ func (q *Queries) ListCustomers(ctx context.Context, arg ListCustomersParams) ([
 		var i Customer
 		if err := rows.Scan(
 			&i.ID,
+			&i.UniqueID,
 			&i.RoleID,
 			&i.FirstName,
 			&i.MiddleName,
 			&i.LastName,
 			&i.Dob,
-			&i.Mobile,
+			&i.CountryCode,
+			&i.Phone,
 			&i.Email,
+			&i.Salt,
 			&i.Password,
-			&i.Status,
+			&i.StatusID,
 			&i.CreateUser,
 			&i.ModifyUser,
 			&i.CreatedAt,
@@ -163,11 +178,11 @@ const updateCustomer = `-- name: UpdateCustomer :one
 UPDATE customers
 set password = $1
 WHERE id = $2
-RETURNING id, role_id, first_name, middle_name, last_name, dob, mobile, email, password, status, create_user, modify_user, created_at, modified_at
+RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at
 `
 
 type UpdateCustomerParams struct {
-	Password string
+	Password pgtype.Text
 	ID       int64
 }
 
@@ -176,15 +191,18 @@ func (q *Queries) UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) 
 	var i Customer
 	err := row.Scan(
 		&i.ID,
+		&i.UniqueID,
 		&i.RoleID,
 		&i.FirstName,
 		&i.MiddleName,
 		&i.LastName,
 		&i.Dob,
-		&i.Mobile,
+		&i.CountryCode,
+		&i.Phone,
 		&i.Email,
+		&i.Salt,
 		&i.Password,
-		&i.Status,
+		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
 		&i.CreatedAt,

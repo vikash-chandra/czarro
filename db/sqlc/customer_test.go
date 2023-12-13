@@ -13,7 +13,7 @@ import (
 
 func createRandomCustomer(t *testing.T) Customer {
 	arg := CreateCustomerParams{
-		RoleID:    int32(util.RandomInt(1, 10)),
+		RoleID:    pgtype.Int4{Int32: int32(100), Valid: true},
 		FirstName: util.RandomString(10),
 		LastName:  util.RandomString(4),
 		Dob: pgtype.Date{
@@ -24,11 +24,12 @@ func createRandomCustomer(t *testing.T) Customer {
 			),
 			Valid: true,
 		},
-		Mobile:     fmt.Sprintf("+91 %d", util.RandomInt(600000000, 999999999)),
-		Email:      util.RandomEmail(),
-		Password:   util.RandomString(8),
-		Status:     "Active",
-		CreateUser: pgtype.Int4{Int32: 2, Valid: true},
+		CountryCode: "+91",
+		Phone:       fmt.Sprintf("%d", util.RandomInt(600000000, 999999999)),
+		Email:       pgtype.Text{String: util.RandomEmail(), Valid: true},
+		Password:    pgtype.Text{String: util.RandomString(8), Valid: true},
+		StatusID:    pgtype.Int4{Int32: 1, Valid: true},
+		CreateUser:  int32(12),
 	}
 	customer, err := testQueries.CreateCustomer(context.Background(), arg)
 	require.NoError(t, err)
@@ -37,10 +38,10 @@ func createRandomCustomer(t *testing.T) Customer {
 	require.Equal(t, arg.FirstName, customer.FirstName)
 	require.Equal(t, arg.LastName, customer.LastName)
 	require.Equal(t, arg.Dob, customer.Dob)
-	require.Equal(t, arg.Mobile, customer.Mobile)
+	require.Equal(t, arg.Phone, customer.Phone)
 	require.Equal(t, arg.Email, customer.Email)
 	require.Equal(t, arg.Password, customer.Password)
-	require.Equal(t, arg.Status, customer.Status)
+	require.Equal(t, arg.StatusID, customer.StatusID)
 
 	require.NotZero(t, customer.ID)
 	require.NotZero(t, customer.CreatedAt)
@@ -71,7 +72,7 @@ func TestGetListCustomer(t *testing.T) {
 func TestUpdateCustomer(t *testing.T) {
 	customer1 := createRandomCustomer(t)
 	arg := UpdateCustomerParams{
-		Password: util.RandomString(9),
+		Password: pgtype.Text{String: util.RandomString(9), Valid: true},
 		ID:       customer1.ID,
 	}
 	customer, err := testQueries.UpdateCustomer(context.Background(), arg)

@@ -5,13 +5,15 @@ INSERT INTO customers (
   middle_name,
   last_name,
   dob,
-  mobile,
+  country_code,
+  phone,
   email,
+  salt,
   password,
-  status,
+  status_id,
   create_user
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
 )
 RETURNING *;
 
