@@ -8,8 +8,10 @@ createdb:
 
 dropdb:
 	docker exec -it postgres dropdb carzorro
+	
 sqlc:
 	sudo snap install sqlc
+
 migrate: 
 	# to create db migration files
 	migrate create -ext sql -dir db/migration -seq init_schema
