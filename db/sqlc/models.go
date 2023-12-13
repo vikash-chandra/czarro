@@ -9,14 +9,48 @@ import (
 )
 
 type Customer struct {
-	ID        int64
-	RoleID    int32
-	FirstName string
-	LastName  string
-	Dob       pgtype.Date
-	Mobile    string
-	Email     string
-	Password  string
-	Status    string
-	CreatedAt pgtype.Timestamptz
+	ID         int64
+	RoleID     int32
+	FirstName  string
+	MiddleName pgtype.Text
+	LastName   string
+	Dob        pgtype.Date
+	Mobile     string
+	Email      string
+	Password   string
+	Status     string
+	CreateUser pgtype.Int4
+	ModifyUser pgtype.Int4
+	CreatedAt  pgtype.Timestamptz
+	ModifiedAt pgtype.Timestamptz
+}
+
+type CustomersAddress struct {
+	ID         int64
+	CustomerID string
+	Address1   string
+	Address2   string
+	Address3   string
+	Address4   string
+	Location   string
+	StatusID   int32
+	CreatedAt  pgtype.Timestamptz
+	ModifiedAt pgtype.Timestamptz
+}
+
+type Role struct {
+	RoleID     int32
+	RoleName   string
+	StatusID   int32
+	CreatedAt  pgtype.Timestamptz
+	ModifiedAt pgtype.Timestamptz
+	Visible    pgtype.Bool
+}
+
+type Status struct {
+	ID         int32
+	Status     string
+	CreatedAt  pgtype.Timestamptz
+	ModifiedAt pgtype.Timestamptz
+	Visible    pgtype.Bool
 }

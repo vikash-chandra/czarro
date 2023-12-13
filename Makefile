@@ -1,5 +1,8 @@
 DB_URL=postgresql://root:secret@localhost:5432/carzorro?sslmode=disable
 
+sqlcinstall:
+	sudo snap install sqlc
+
 postgres:
 	docker run --name postgres -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
 
@@ -10,7 +13,7 @@ dropdb:
 	docker exec -it postgres dropdb carzorro
 
 sqlc:
-	sudo snap install sqlc
+	sqlc generate
 
 migrate: 
 	# to create db migration files
@@ -28,6 +31,6 @@ migratedown:
 migratedown1:
 	migrate -path db/migration -database "$(DB_URL)" -verbose down 1
 
-sqlc:
-	sqlc generate
-.PHONY: postgres createdb dropdb migrate migrateup migratedown migrateup1 migratedown1 sqlc
+test:
+	go test -v -cover ./...
+.PHONY: sqlcinstall postgres createdb dropdb migrate migrateup migratedown migrateup1 migratedown1 sqlc test

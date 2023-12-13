@@ -15,52 +15,62 @@ const createCustomer = `-- name: CreateCustomer :one
 INSERT INTO customers (
   role_id,
   first_name,
+  middle_name,
   last_name,
   dob,
   mobile,
   email,
   password,
-  status
+  status,
+  create_user
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
 )
-RETURNING id, role_id, first_name, last_name, dob, mobile, email, password, status, created_at
+RETURNING id, role_id, first_name, middle_name, last_name, dob, mobile, email, password, status, create_user, modify_user, created_at, modified_at
 `
 
 type CreateCustomerParams struct {
-	RoleID    int32
-	FirstName string
-	LastName  string
-	Dob       pgtype.Date
-	Mobile    string
-	Email     string
-	Password  string
-	Status    string
+	RoleID     int32
+	FirstName  string
+	MiddleName pgtype.Text
+	LastName   string
+	Dob        pgtype.Date
+	Mobile     string
+	Email      string
+	Password   string
+	Status     string
+	CreateUser pgtype.Int4
 }
 
 func (q *Queries) CreateCustomer(ctx context.Context, arg CreateCustomerParams) (Customer, error) {
 	row := q.db.QueryRow(ctx, createCustomer,
 		arg.RoleID,
 		arg.FirstName,
+		arg.MiddleName,
 		arg.LastName,
 		arg.Dob,
 		arg.Mobile,
 		arg.Email,
 		arg.Password,
 		arg.Status,
+		arg.CreateUser,
 	)
 	var i Customer
 	err := row.Scan(
 		&i.ID,
 		&i.RoleID,
 		&i.FirstName,
+		&i.MiddleName,
 		&i.LastName,
 		&i.Dob,
 		&i.Mobile,
 		&i.Email,
 		&i.Password,
 		&i.Status,
+		&i.CreateUser,
+		&i.ModifyUser,
 		&i.CreatedAt,
+		&i.ModifiedAt,
 	)
 	return i, err
 }
@@ -76,7 +86,7 @@ func (q *Queries) DeleteCustomer(ctx context.Context, id int64) error {
 }
 
 const getCustomer = `-- name: GetCustomer :one
-SELECT id, role_id, first_name, last_name, dob, mobile, email, password, status, created_at FROM customers
+SELECT id, role_id, first_name, middle_name, last_name, dob, mobile, email, password, status, create_user, modify_user, created_at, modified_at FROM customers
 WHERE id=$1 LIMIT 1
 `
 
@@ -87,31 +97,35 @@ func (q *Queries) GetCustomer(ctx context.Context, id int64) (Customer, error) {
 		&i.ID,
 		&i.RoleID,
 		&i.FirstName,
+		&i.MiddleName,
 		&i.LastName,
 		&i.Dob,
 		&i.Mobile,
 		&i.Email,
 		&i.Password,
 		&i.Status,
+		&i.CreateUser,
+		&i.ModifyUser,
 		&i.CreatedAt,
+		&i.ModifiedAt,
 	)
 	return i, err
 }
 
-const listAuthors = `-- name: ListAuthors :many
-SELECT id, role_id, first_name, last_name, dob, mobile, email, password, status, created_at FROM customers
+const listCustomers = `-- name: ListCustomers :many
+SELECT id, role_id, first_name, middle_name, last_name, dob, mobile, email, password, status, create_user, modify_user, created_at, modified_at FROM customers
 ORDER BY id
 LIMIT $1
 OFFSET $2
 `
 
-type ListAuthorsParams struct {
+type ListCustomersParams struct {
 	Limit  int32
 	Offset int32
 }
 
-func (q *Queries) ListAuthors(ctx context.Context, arg ListAuthorsParams) ([]Customer, error) {
-	rows, err := q.db.Query(ctx, listAuthors, arg.Limit, arg.Offset)
+func (q *Queries) ListCustomers(ctx context.Context, arg ListCustomersParams) ([]Customer, error) {
+	rows, err := q.db.Query(ctx, listCustomers, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -123,13 +137,17 @@ func (q *Queries) ListAuthors(ctx context.Context, arg ListAuthorsParams) ([]Cus
 			&i.ID,
 			&i.RoleID,
 			&i.FirstName,
+			&i.MiddleName,
 			&i.LastName,
 			&i.Dob,
 			&i.Mobile,
 			&i.Email,
 			&i.Password,
 			&i.Status,
+			&i.CreateUser,
+			&i.ModifyUser,
 			&i.CreatedAt,
+			&i.ModifiedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -145,7 +163,7 @@ const updateCustomer = `-- name: UpdateCustomer :one
 UPDATE customers
 set password = $1
 WHERE id = $2
-RETURNING id, role_id, first_name, last_name, dob, mobile, email, password, status, created_at
+RETURNING id, role_id, first_name, middle_name, last_name, dob, mobile, email, password, status, create_user, modify_user, created_at, modified_at
 `
 
 type UpdateCustomerParams struct {
@@ -160,13 +178,17 @@ func (q *Queries) UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) 
 		&i.ID,
 		&i.RoleID,
 		&i.FirstName,
+		&i.MiddleName,
 		&i.LastName,
 		&i.Dob,
 		&i.Mobile,
 		&i.Email,
 		&i.Password,
 		&i.Status,
+		&i.CreateUser,
+		&i.ModifyUser,
 		&i.CreatedAt,
+		&i.ModifiedAt,
 	)
 	return i, err
 }
