@@ -2,7 +2,10 @@ module github.com/czarro
 
 go 1.21.4
 
-require github.com/jackc/pgx/v5 v5.5.1
+require (
+	github.com/jackc/pgx/v5 v5.5.1
+	github.com/lib/pq v1.10.9
+)
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
