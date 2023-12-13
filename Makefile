@@ -15,7 +15,7 @@ sqlc:
 migrate: 
 	# to create db migration files
 	migrate create -ext sql -dir db/migration -seq init_schema
-	
+
 migrateup:
 	migrate -path db/migration -database "$(DB_URL)" -verbose up
 

@@ -5,4 +5,5 @@ install go:
     sudo snap install go --classic
 
 install sqlc:
+    https://docs.sqlc.dev/en/stable/tutorials/getting-started-sqlite.html
 	sudo snap install sqlc

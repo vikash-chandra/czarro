@@ -30,12 +30,12 @@ RETURNING id, role_id, first_name, last_name, dob, mobile, email, password, stat
 type CreateCustomerParams struct {
 	RoleID    int32
 	FirstName string
-	LastName  int64
+	LastName  string
 	Dob       pgtype.Date
 	Mobile    string
 	Email     string
 	Password  string
-	Status    pgtype.Text
+	Status    string
 }
 
 func (q *Queries) CreateCustomer(ctx context.Context, arg CreateCustomerParams) (Customer, error) {

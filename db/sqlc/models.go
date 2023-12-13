@@ -12,11 +12,11 @@ type Customer struct {
 	ID        int64
 	RoleID    int32
 	FirstName string
-	LastName  int64
+	LastName  string
 	Dob       pgtype.Date
 	Mobile    string
 	Email     string
 	Password  string
-	Status    pgtype.Text
+	Status    string
 	CreatedAt pgtype.Timestamptz
 }
