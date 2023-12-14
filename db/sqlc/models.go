@@ -5,60 +5,62 @@
 package db
 
 import (
+	"time"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Customer struct {
-	ID          int64
-	UniqueID    string
-	RoleID      pgtype.Int4
-	FirstName   string
-	MiddleName  pgtype.Text
-	LastName    string
-	Dob         pgtype.Date
-	CountryCode string
-	Phone       string
-	Email       pgtype.Text
-	Salt        pgtype.Text
-	Password    pgtype.Text
-	StatusID    pgtype.Int4
-	CreateUser  int32
-	ModifyUser  pgtype.Int4
-	CreatedAt   pgtype.Timestamptz
-	ModifiedAt  pgtype.Timestamptz
+	ID          int64              `json:"id"`
+	UniqueID    string             `json:"unique_id"`
+	RoleID      pgtype.Int4        `json:"role_id"`
+	FirstName   string             `json:"first_name"`
+	MiddleName  pgtype.Text        `json:"middle_name"`
+	LastName    string             `json:"last_name"`
+	Dob         pgtype.Date        `json:"dob"`
+	CountryCode string             `json:"country_code"`
+	Phone       string             `json:"phone"`
+	Email       pgtype.Text        `json:"email"`
+	Salt        pgtype.Text        `json:"salt"`
+	Password    pgtype.Text        `json:"password"`
+	StatusID    pgtype.Int4        `json:"status_id"`
+	CreateUser  int32              `json:"create_user"`
+	ModifyUser  pgtype.Int4        `json:"modify_user"`
+	CreatedAt   time.Time          `json:"created_at"`
+	ModifiedAt  pgtype.Timestamptz `json:"modified_at"`
 }
 
 type CustomersAddress struct {
-	ID         int64
-	CustomerID pgtype.Int4
-	Address1   string
-	Address2   pgtype.Text
-	Address3   pgtype.Text
-	Address4   pgtype.Text
-	Location   string
-	StatusID   pgtype.Int4
-	CreateUser int32
-	ModifyUser pgtype.Int4
-	CreatedAt  pgtype.Timestamptz
-	ModifiedAt pgtype.Timestamptz
+	ID         int64              `json:"id"`
+	CustomerID pgtype.Int4        `json:"customer_id"`
+	Address1   string             `json:"address1"`
+	Address2   pgtype.Text        `json:"address2"`
+	Address3   pgtype.Text        `json:"address3"`
+	Address4   pgtype.Text        `json:"address4"`
+	Location   string             `json:"location"`
+	StatusID   pgtype.Int4        `json:"status_id"`
+	CreateUser int32              `json:"create_user"`
+	ModifyUser pgtype.Int4        `json:"modify_user"`
+	CreatedAt  time.Time          `json:"created_at"`
+	ModifiedAt pgtype.Timestamptz `json:"modified_at"`
 }
 
 type Role struct {
-	RoleID     int32
-	RoleName   pgtype.Text
-	StatusID   pgtype.Int4
-	CreateUser int32
-	ModifyUser pgtype.Int4
-	CreatedAt  pgtype.Timestamptz
-	ModifiedAt pgtype.Timestamptz
-	Visible    bool
+	RoleID     int32              `json:"role_id"`
+	RoleName   pgtype.Text        `json:"role_name"`
+	StatusID   pgtype.Int4        `json:"status_id"`
+	CreateUser int32              `json:"create_user"`
+	ModifyUser pgtype.Int4        `json:"modify_user"`
+	CreatedAt  time.Time          `json:"created_at"`
+	ModifiedAt pgtype.Timestamptz `json:"modified_at"`
+	Visible    bool               `json:"visible"`
 }
 
 type Status struct {
-	ID         int32
-	UserStatus string
-	CreateUser int32
-	ModifyUser pgtype.Int4
-	CreatedAt  pgtype.Timestamptz
-	ModifiedAt pgtype.Timestamptz
+	ID         int32              `json:"id"`
+	UserStatus string             `json:"user_status"`
+	CreateUser int32              `json:"create_user"`
+	ModifyUser pgtype.Int4        `json:"modify_user"`
+	CreatedAt  time.Time          `json:"created_at"`
+	ModifiedAt pgtype.Timestamptz `json:"modified_at"`
 }

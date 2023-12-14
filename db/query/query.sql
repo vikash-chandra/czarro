@@ -33,13 +33,6 @@ set password = $1
 WHERE id = $2
 RETURNING *;
 
--- name: UpdateCustomerForUpdate :one
-SELECT * FROM customers
-WHERE id = $2
-RETURNING *
-FOR NOT KEY UPDATE; 
--- to block other select query till this query executed
-
 -- name: DeleteCustomer :exec
 DELETE FROM customers
 WHERE id = $1;

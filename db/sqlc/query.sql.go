@@ -32,18 +32,18 @@ RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, count
 `
 
 type CreateCustomerParams struct {
-	RoleID      pgtype.Int4
-	FirstName   string
-	MiddleName  pgtype.Text
-	LastName    string
-	Dob         pgtype.Date
-	CountryCode string
-	Phone       string
-	Email       pgtype.Text
-	Salt        pgtype.Text
-	Password    pgtype.Text
-	StatusID    pgtype.Int4
-	CreateUser  int32
+	RoleID      pgtype.Int4 `json:"role_id"`
+	FirstName   string      `json:"first_name"`
+	MiddleName  pgtype.Text `json:"middle_name"`
+	LastName    string      `json:"last_name"`
+	Dob         pgtype.Date `json:"dob"`
+	CountryCode string      `json:"country_code"`
+	Phone       string      `json:"phone"`
+	Email       pgtype.Text `json:"email"`
+	Salt        pgtype.Text `json:"salt"`
+	Password    pgtype.Text `json:"password"`
+	StatusID    pgtype.Int4 `json:"status_id"`
+	CreateUser  int32       `json:"create_user"`
 }
 
 func (q *Queries) CreateCustomer(ctx context.Context, arg CreateCustomerParams) (Customer, error) {
@@ -132,8 +132,8 @@ OFFSET $2
 `
 
 type ListCustomersParams struct {
-	Limit  int32
-	Offset int32
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
 }
 
 func (q *Queries) ListCustomers(ctx context.Context, arg ListCustomersParams) ([]Customer, error) {
@@ -142,7 +142,7 @@ func (q *Queries) ListCustomers(ctx context.Context, arg ListCustomersParams) ([
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Customer
+	items := []Customer{}
 	for rows.Next() {
 		var i Customer
 		if err := rows.Scan(
@@ -182,8 +182,8 @@ RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, count
 `
 
 type UpdateCustomerParams struct {
-	Password pgtype.Text
-	ID       int64
+	Password pgtype.Text `json:"password"`
+	ID       int64       `json:"id"`
 }
 
 func (q *Queries) UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) (Customer, error) {
