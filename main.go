@@ -4,11 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/czarro/api"
 	db "github.com/czarro/db/sqlc"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 )
 
@@ -18,13 +17,11 @@ const (
 )
 
 func main() {
-	conn, err := pgx.Connect(context.Background(), dbSource)
+	connPool, err := pgxpool.New(context.Background(), dbSource)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v", err)
-		os.Exit(1)
+		fmt.Println(err.Error())
 	}
-	defer conn.Close(context.Background())
-	queries := db.New(conn)
+	queries := db.NewStore(connPool)
 	server := api.NewServer(queries)
 	err = server.Start(addresss)
 	if err != nil {
