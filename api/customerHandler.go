@@ -36,3 +36,28 @@ func (s *Server) CreateCustomer(ctx *gin.Context) {
 	logger.Info(fmt.Sprintf("%+v", account))
 	ctx.JSON(http.StatusOK, account)
 }
+
+type getCustomerRequest struct {
+	ID int64 `uri:"id" binding:"required,min=1"`
+}
+
+func (s *Server) GetCustomer(ctx *gin.Context) {
+	var req getCustomerRequest
+	logger.Info("===>>>" + ctx.Request.RequestURI)
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	account, err := s.store.GetCustomer(ctx, req.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	logger.Info(fmt.Sprintf("%+v", account))
+	ctx.JSON(http.StatusOK, account)
+}
+
+// Ishu1708!
+// wp_termmeta product
+// wp_users
+// wp_yoast_indexable

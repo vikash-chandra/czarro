@@ -7,6 +7,7 @@ import (
 
 	"github.com/czarro/api"
 	db "github.com/czarro/db/sqlc"
+	"github.com/czarro/util"
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 )
@@ -17,7 +18,12 @@ const (
 )
 
 func main() {
-	connPool, err := pgxpool.New(context.Background(), dbSource)
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	connPool, err := pgxpool.New(context.Background(), config.DBSource)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
