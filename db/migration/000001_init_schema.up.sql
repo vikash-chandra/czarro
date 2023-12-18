@@ -25,7 +25,7 @@ CREATE TABLE "customers" (
   "unique_id" varchar NOT NULL DEFAULT uuid_generate_v4() UNIQUE,
   "role_id" integer,
   "first_name" varchar NOT NULL,
-  "middle_name" varchar,
+  "middle_name" varchar NOT NULL DEFAULT NULL,
   "last_name" varchar NOT NULL,
   "dob" date,
   "country_code" varchar NOT NULL,

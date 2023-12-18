@@ -28,7 +28,7 @@ func NewStore(connPool *pgxpool.Pool) SQLStore {
 	}
 }
 
-func (s *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
+func (s *SQLStore) ExecTx(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := s.connPool.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return err

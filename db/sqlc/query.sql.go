@@ -34,7 +34,7 @@ RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, count
 type CreateCustomerParams struct {
 	RoleID      pgtype.Int4 `json:"role_id"`
 	FirstName   string      `json:"first_name"`
-	MiddleName  pgtype.Text `json:"middle_name"`
+	MiddleName  string      `json:"middle_name"`
 	LastName    string      `json:"last_name"`
 	Dob         pgtype.Date `json:"dob"`
 	CountryCode string      `json:"country_code"`
@@ -101,6 +101,37 @@ WHERE id=$1 LIMIT 1
 
 func (q *Queries) GetCustomer(ctx context.Context, id int64) (Customer, error) {
 	row := q.db.QueryRow(ctx, getCustomer, id)
+	var i Customer
+	err := row.Scan(
+		&i.ID,
+		&i.UniqueID,
+		&i.RoleID,
+		&i.FirstName,
+		&i.MiddleName,
+		&i.LastName,
+		&i.Dob,
+		&i.CountryCode,
+		&i.Phone,
+		&i.Email,
+		&i.Salt,
+		&i.Password,
+		&i.StatusID,
+		&i.CreateUser,
+		&i.ModifyUser,
+		&i.CreatedAt,
+		&i.ModifiedAt,
+	)
+	return i, err
+}
+
+const getCustomerForUpdate = `-- name: GetCustomerForUpdate :one
+SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM customers
+WHERE id=$1 LIMIT 1
+FOR NO KEY UPDATE
+`
+
+func (q *Queries) GetCustomerForUpdate(ctx context.Context, id int64) (Customer, error) {
+	row := q.db.QueryRow(ctx, getCustomerForUpdate, id)
 	var i Customer
 	err := row.Scan(
 		&i.ID,

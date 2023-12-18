@@ -1,1 +1,4 @@
+DROP TABLE IF EXISTS status;
+DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS customers_address;

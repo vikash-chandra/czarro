@@ -2,27 +2,28 @@ package db
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"os"
 	"testing"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/czarro/util"
+	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/lib/pq"
 )
 
-const (
-	dbSource = "postgresql://root:secret@localhost:5432/carzorro?sslmode=disable"
-)
-
-var testQueries *Queries
+var testStore Store
 
 func TestMain(m *testing.M) {
-	conn, err := pgx.Connect(context.Background(), dbSource)
+	config, err := util.LoadConfig("../..")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v", err)
-		os.Exit(1)
+		log.Fatal("cannot load config:", err)
 	}
-	defer conn.Close(context.Background())
-	testQueries = New(conn)
+
+	connPool, err := pgxpool.New(context.Background(), config.DBSource)
+	if err != nil {
+		log.Fatal("cannot connect to db:", err)
+	}
+
+	testStore = NewStore(connPool)
 	os.Exit(m.Run())
 }

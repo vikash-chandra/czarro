@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"log"
 	"testing"
 	"time"
 
@@ -13,9 +14,10 @@ import (
 
 func createRandomCustomer(t *testing.T) Customer {
 	arg := CreateCustomerParams{
-		RoleID:    pgtype.Int4{Int32: int32(100), Valid: true},
-		FirstName: util.RandomString(10),
-		LastName:  util.RandomString(4),
+		RoleID:     pgtype.Int4{Int32: int32(100), Valid: true},
+		FirstName:  util.RandomString(10),
+		MiddleName: util.RandomString(5),
+		LastName:   util.RandomString(4),
 		Dob: pgtype.Date{
 			Time: time.Date(int(util.RandomInt(1900, 2023)),
 				time.Month(util.RandomInt(1, 12)),
@@ -31,7 +33,7 @@ func createRandomCustomer(t *testing.T) Customer {
 		StatusID:    pgtype.Int4{Int32: 1, Valid: true},
 		CreateUser:  int32(12),
 	}
-	customer, err := testQueries.CreateCustomer(context.Background(), arg)
+	customer, err := testStore.CreateCustomer(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, customer)
 	require.Equal(t, arg.RoleID, customer.RoleID)
@@ -54,7 +56,7 @@ func TestCreateCustomer(t *testing.T) {
 
 func TestGetCustomer(t *testing.T) {
 	customer := createRandomCustomer(t)
-	sameCustomer, err := testQueries.GetCustomer(context.Background(), customer.ID)
+	sameCustomer, err := testStore.GetCustomer(context.Background(), customer.ID)
 	require.NoError(t, err)
 	require.Equal(t, customer, sameCustomer)
 }
@@ -64,7 +66,7 @@ func TestGetListCustomer(t *testing.T) {
 		Limit:  5,
 		Offset: 1,
 	}
-	customers, err := testQueries.ListCustomers(context.Background(), arg)
+	customers, err := testStore.ListCustomers(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, customers)
 }
@@ -75,8 +77,28 @@ func TestUpdateCustomer(t *testing.T) {
 		Password: pgtype.Text{String: util.RandomString(9), Valid: true},
 		ID:       customer1.ID,
 	}
-	customer, err := testQueries.UpdateCustomer(context.Background(), arg)
+	customer, err := testStore.UpdateCustomer(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEqual(t, customer1, customer)
 	require.NotEqual(t, customer1.Password, customer.Password)
+}
+
+func TestUpdateCustomerUsingForUpdate(t *testing.T) {
+	var err error
+	customer := createRandomCustomer(t)
+	arg := UpdateCustomerParams{
+		Password: pgtype.Text{String: util.RandomString(9), Valid: true},
+		ID:       customer.ID,
+	}
+	customer, err = testStore.GetCustomerForUpdate(context.Background(), customer.ID)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	udatedCustomer, err := testStore.UpdateCustomer(context.Background(), arg)
+	if err != nil {
+		log.Println(err)
+	}
+	require.NoError(t, err)
+	require.NotEqual(t, customer, udatedCustomer)
+	require.NotEqual(t, customer.Password, udatedCustomer.Password)
 }

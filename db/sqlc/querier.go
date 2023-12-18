@@ -12,6 +12,7 @@ type Querier interface {
 	CreateCustomer(ctx context.Context, arg CreateCustomerParams) (Customer, error)
 	DeleteCustomer(ctx context.Context, id int64) error
 	GetCustomer(ctx context.Context, id int64) (Customer, error)
+	GetCustomerForUpdate(ctx context.Context, id int64) (Customer, error)
 	ListCustomers(ctx context.Context, arg ListCustomersParams) ([]Customer, error)
 	UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) (Customer, error)
 }

@@ -28,13 +28,13 @@ func (s *Server) CreateCustomer(ctx *gin.Context) {
 		CountryCode: req.CountryCode,
 	}
 	fmt.Println(arg)
-	account, err := s.store.CreateCustomer(ctx, arg)
+	customer, err := s.store.CreateCustomer(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
-	logger.Info(fmt.Sprintf("%+v", account))
-	ctx.JSON(http.StatusOK, account)
+	logger.Info(fmt.Sprintf("%+v", customer))
+	ctx.JSON(http.StatusOK, customer)
 }
 
 type getCustomerRequest struct {
@@ -48,13 +48,13 @@ func (s *Server) GetCustomer(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
 
-	account, err := s.store.GetCustomer(ctx, req.ID)
+	customer, err := s.store.GetCustomer(ctx, req.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	logger.Info(fmt.Sprintf("%+v", account))
-	ctx.JSON(http.StatusOK, account)
+	logger.Info(fmt.Sprintf("%+v", customer))
+	ctx.JSON(http.StatusOK, customer)
 }
 
 // Ishu1708!

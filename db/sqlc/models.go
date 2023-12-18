@@ -15,7 +15,7 @@ type Customer struct {
 	UniqueID    string             `json:"unique_id"`
 	RoleID      pgtype.Int4        `json:"role_id"`
 	FirstName   string             `json:"first_name"`
-	MiddleName  pgtype.Text        `json:"middle_name"`
+	MiddleName  string             `json:"middle_name"`
 	LastName    string             `json:"last_name"`
 	Dob         pgtype.Date        `json:"dob"`
 	CountryCode string             `json:"country_code"`
