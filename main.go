@@ -23,7 +23,7 @@ func main() {
 		fmt.Println(err.Error())
 	}
 	queries := db.NewStore(connPool)
-	server := api.NewServer(queries)
+	server := api.NewServer(queries, config)
 	err = server.Start(config.HTTPServerAddress)
 	if err != nil {
 		log.Fatal(err)

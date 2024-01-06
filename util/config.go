@@ -10,6 +10,7 @@ type Config struct {
 	Environment       string `mapstructure:"ENVIRONMENT"`
 	DBSource          string `mapstructure:"DB_SOURCE"`
 	HTTPServerAddress string `mapstructure:"HTTP_SERVER_ADDRESS"`
+	ApiServiceRoute   string `mapstruct:"API_SERVICE_ROUTE"`
 }
 
 // LoadConfig reads configuration from file or environment variables.
