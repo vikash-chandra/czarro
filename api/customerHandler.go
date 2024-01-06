@@ -9,10 +9,10 @@ import (
 )
 
 type CreateCustomerRequest struct {
-	FirstName   string `json:"first_name"`
-	LastName    string `json:"last_name"`
-	Phone       string `json:"phone"`
-	CountryCode string `json:"country_code"`
+	FirstName   string `json:"first_name" binding:"required,alphanum"`
+	LastName    string `json:"last_name" binding:"required,alphanum"`
+	Phone       string `json:"phone" binding:"required,alphanum"`
+	CountryCode string `json:"country_code" binding:"required,alphanum"`
 }
 
 func (s *Server) CreateCustomer(ctx *gin.Context) {
