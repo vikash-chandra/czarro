@@ -22,7 +22,7 @@ Table roles {
   visible boolean [not null, default:true]
 }
 
-Table customers {
+Table users {
   id bigserial [primary key]
   unique_id uuid [not null]
   role_id integer [ref: > roles.role_id]
@@ -47,9 +47,9 @@ Table customers {
   }
 }
 
-Table customers_address {
+Table users_address {
   id bigserial [primary key]
-  customer_id integer [ref: > customers.unique_id]
+  User_id integer [ref: > users.unique_id]
   address1 varchar [not null]
   address2 varchar
   address3 varchar
@@ -62,6 +62,33 @@ Table customers_address {
   modified_at timestamptz
 
   Indexes {
-    customer_id
+    User_id
   }
+}
+
+
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table notification {
+  id integer
+  status varchar [not null, default: "Suspended"]
+  create_user integer [not null, default: 0]
+  modify_user integer
+  created_at timestamptz [not null, default: `now()`]
+  modified_at timestamptz
+}
+
+
+Table services {
+  id integer [primary key]
+  title varchar(50)
+  short_name varchar(30)
+  description text
+  send_notification integer
+  status varchar [not null, default: "Suspended"]
+  create_user integer [not null, default: 0]
+  modify_user integer
+  created_at timestamptz [not null, default: `now()`]
+  modified_at timestamptz
 }

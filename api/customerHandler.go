@@ -8,53 +8,53 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CreateCustomerRequest struct {
+type CreateUserRequest struct {
 	FirstName   string `json:"first_name" binding:"required,alphanum"`
 	LastName    string `json:"last_name" binding:"required,alphanum"`
-	Phone       string `json:"phone" binding:"required,alphanum"`
+	Phone       string `json:"phone" binding:"required,num"`
 	CountryCode string `json:"country_code" binding:"required,alphanum"`
 }
 
-func (s *Server) CreateCustomer(ctx *gin.Context) {
-	var req CreateCustomerRequest
+func (s *Server) CreateUser(ctx *gin.Context) {
+	var req CreateUserRequest
 	logger.Info("===>>>" + ctx.Request.RequestURI)
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
-	arg := db.CreateCustomerParams{
+	arg := db.CreateUserParams{
 		FirstName:   req.FirstName,
 		LastName:    req.LastName,
 		Phone:       req.Phone,
 		CountryCode: req.CountryCode,
 	}
 	fmt.Println(arg)
-	customer, err := s.store.CreateCustomer(ctx, arg)
+	User, err := s.store.CreateUser(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
-	logger.Info(fmt.Sprintf("%+v", customer))
-	ctx.JSON(http.StatusOK, customer)
+	logger.Info(fmt.Sprintf("%+v", User))
+	ctx.JSON(http.StatusOK, User)
 }
 
-type getCustomerRequest struct {
+type getUserRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
-func (s *Server) GetCustomer(ctx *gin.Context) {
-	var req getCustomerRequest
+func (s *Server) GetUser(ctx *gin.Context) {
+	var req getUserRequest
 	logger.Info("===>>>" + ctx.Request.RequestURI)
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
 
-	customer, err := s.store.GetCustomer(ctx, req.ID)
+	User, err := s.store.GetUser(ctx, req.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	logger.Info(fmt.Sprintf("%+v", customer))
-	ctx.JSON(http.StatusOK, customer)
+	logger.Info(fmt.Sprintf("%+v", User))
+	ctx.JSON(http.StatusOK, User)
 }
 
 // Ishu1708!

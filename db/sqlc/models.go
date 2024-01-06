@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Customer struct {
+type User struct {
 	ID          int64              `json:"id"`
 	UniqueID    string             `json:"unique_id"`
 	RoleID      pgtype.Int4        `json:"role_id"`
@@ -30,9 +30,9 @@ type Customer struct {
 	ModifiedAt  pgtype.Timestamptz `json:"modified_at"`
 }
 
-type CustomersAddress struct {
+type usersAddress struct {
 	ID         int64              `json:"id"`
-	CustomerID pgtype.Int4        `json:"customer_id"`
+	UserID pgtype.Int4        `json:"User_id"`
 	Address1   string             `json:"address1"`
 	Address2   pgtype.Text        `json:"address2"`
 	Address3   pgtype.Text        `json:"address3"`

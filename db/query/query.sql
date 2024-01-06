@@ -1,5 +1,5 @@
--- name: CreateCustomer :one
-INSERT INTO customers (
+-- name: CreateUser :one
+INSERT INTO users (
   role_id,
   first_name,
   middle_name,
@@ -17,27 +17,27 @@ INSERT INTO customers (
 )
 RETURNING *;
 
--- name: GetCustomer :one
-SELECT * FROM customers
+-- name: GetUser :one
+SELECT * FROM users
 WHERE id=$1 LIMIT 1;
 
--- name: ListCustomers :many
-SELECT * FROM customers
+-- name: Listusers :many
+SELECT * FROM users
 ORDER BY id
 LIMIT $1
 OFFSET $2;
 
--- name: UpdateCustomer :one
-UPDATE customers
+-- name: UpdateUser :one
+UPDATE users
 set password = $1
 WHERE id = $2
 RETURNING *;
 
--- name: DeleteCustomer :exec
-DELETE FROM customers
+-- name: DeleteUser :exec
+DELETE FROM users
 WHERE id = $1;
 
--- name: GetCustomerForUpdate :one
-SELECT * FROM customers
+-- name: GetUserForUpdate :one
+SELECT * FROM users
 WHERE id=$1 LIMIT 1
 FOR NO KEY UPDATE;

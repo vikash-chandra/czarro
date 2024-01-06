@@ -28,9 +28,9 @@ func NewServer(store db.Store, config util.Config) *Server {
 	router.Use(ginzap.Ginzap(logger, time.RFC3339, true))
 	router.Use(ginzap.RecoveryWithZap(logger, true))
 
-	router.POST(apiPath+"/customers", server.CreateCustomer)
-	router.GET(apiPath+"/customers/:id", server.GetCustomer)
-	router.PATCH(apiPath + "/customer")
+	router.POST(apiPath+"/users", server.CreateUser)
+	router.GET(apiPath+"/users/:id", server.GetUser)
+	router.PATCH(apiPath + "/user")
 
 	server.router = router
 	return server

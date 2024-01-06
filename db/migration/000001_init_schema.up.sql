@@ -20,7 +20,7 @@ CREATE TABLE "roles" (
   "visible" boolean NOT NULL DEFAULT true
 );
 
-CREATE TABLE "customers" (
+CREATE TABLE "users" (
   "id" bigserial PRIMARY KEY,
   "unique_id" varchar NOT NULL DEFAULT uuid_generate_v4() UNIQUE,
   "role_id" integer,
@@ -40,9 +40,9 @@ CREATE TABLE "customers" (
   "modified_at" timestamptz
 );
 
-CREATE TABLE "customers_address" (
+CREATE TABLE "users_address" (
   "id" bigserial PRIMARY KEY,
-  "customer_id" integer,
+  "User_id" integer,
   "address1" varchar NOT NULL,
   "address2" varchar,
   "address3" varchar,
@@ -55,20 +55,20 @@ CREATE TABLE "customers_address" (
   "modified_at" timestamptz
 );
 
-CREATE INDEX ON "customers" ("unique_id");
+CREATE INDEX ON "users" ("unique_id");
 
-CREATE INDEX ON "customers" ("phone");
+CREATE INDEX ON "users" ("phone");
 
-CREATE INDEX ON "customers_address" ("customer_id");
+CREATE INDEX ON "users_address" ("User_id");
 
 ALTER TABLE "roles" ADD FOREIGN KEY ("status_id") REFERENCES "status" ("id");
 
-ALTER TABLE "customers" ADD FOREIGN KEY ("role_id") REFERENCES "roles" ("role_id");
+ALTER TABLE "users" ADD FOREIGN KEY ("role_id") REFERENCES "roles" ("role_id");
 
-ALTER TABLE "customers" ADD FOREIGN KEY ("status_id") REFERENCES "status" ("id");
+ALTER TABLE "users" ADD FOREIGN KEY ("status_id") REFERENCES "status" ("id");
 
 INSERT INTO status (id, user_status, create_user) 
 VALUES (1, 'Active', 100);
 
 INSERT INTO roles (role_id, role_name, status_id, visible) 
-VALUES (100, 'customer', 1, true);
+VALUES (100, 'User', 1, true);

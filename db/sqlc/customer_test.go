@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomCustomer(t *testing.T) Customer {
-	arg := CreateCustomerParams{
+func createRandomUser(t *testing.T) User {
+	arg := CreateUserParams{
 		RoleID:     pgtype.Int4{Int32: int32(100), Valid: true},
 		FirstName:  util.RandomString(10),
 		MiddleName: util.RandomString(5),
@@ -33,72 +33,72 @@ func createRandomCustomer(t *testing.T) Customer {
 		StatusID:    pgtype.Int4{Int32: 1, Valid: true},
 		CreateUser:  int32(12),
 	}
-	customer, err := testStore.CreateCustomer(context.Background(), arg)
+	User, err := testStore.CreateUser(context.Background(), arg)
 	require.NoError(t, err)
-	require.NotEmpty(t, customer)
-	require.Equal(t, arg.RoleID, customer.RoleID)
-	require.Equal(t, arg.FirstName, customer.FirstName)
-	require.Equal(t, arg.LastName, customer.LastName)
-	require.Equal(t, arg.Dob, customer.Dob)
-	require.Equal(t, arg.Phone, customer.Phone)
-	require.Equal(t, arg.Email, customer.Email)
-	require.Equal(t, arg.Password, customer.Password)
-	require.Equal(t, arg.StatusID, customer.StatusID)
+	require.NotEmpty(t, User)
+	require.Equal(t, arg.RoleID, User.RoleID)
+	require.Equal(t, arg.FirstName, User.FirstName)
+	require.Equal(t, arg.LastName, User.LastName)
+	require.Equal(t, arg.Dob, User.Dob)
+	require.Equal(t, arg.Phone, User.Phone)
+	require.Equal(t, arg.Email, User.Email)
+	require.Equal(t, arg.Password, User.Password)
+	require.Equal(t, arg.StatusID, User.StatusID)
 
-	require.NotZero(t, customer.ID)
-	require.NotZero(t, customer.CreatedAt)
-	return customer
+	require.NotZero(t, User.ID)
+	require.NotZero(t, User.CreatedAt)
+	return User
 }
 
-func TestCreateCustomer(t *testing.T) {
-	createRandomCustomer(t)
+func TestCreateUser(t *testing.T) {
+	createRandomUser(t)
 }
 
-func TestGetCustomer(t *testing.T) {
-	customer := createRandomCustomer(t)
-	sameCustomer, err := testStore.GetCustomer(context.Background(), customer.ID)
+func TestGetUser(t *testing.T) {
+	User := createRandomUser(t)
+	sameUser, err := testStore.GetUser(context.Background(), User.ID)
 	require.NoError(t, err)
-	require.Equal(t, customer, sameCustomer)
+	require.Equal(t, User, sameUser)
 }
 
-func TestGetListCustomer(t *testing.T) {
-	arg := ListCustomersParams{
+func TestGetListUser(t *testing.T) {
+	arg := ListusersParams{
 		Limit:  5,
 		Offset: 1,
 	}
-	customers, err := testStore.ListCustomers(context.Background(), arg)
+	users, err := testStore.Listusers(context.Background(), arg)
 	require.NoError(t, err)
-	require.NotEmpty(t, customers)
+	require.NotEmpty(t, users)
 }
 
-func TestUpdateCustomer(t *testing.T) {
-	customer1 := createRandomCustomer(t)
-	arg := UpdateCustomerParams{
+func TestUpdateUser(t *testing.T) {
+	User1 := createRandomUser(t)
+	arg := UpdateUserParams{
 		Password: pgtype.Text{String: util.RandomString(9), Valid: true},
-		ID:       customer1.ID,
+		ID:       User1.ID,
 	}
-	customer, err := testStore.UpdateCustomer(context.Background(), arg)
+	User, err := testStore.UpdateUser(context.Background(), arg)
 	require.NoError(t, err)
-	require.NotEqual(t, customer1, customer)
-	require.NotEqual(t, customer1.Password, customer.Password)
+	require.NotEqual(t, User1, User)
+	require.NotEqual(t, User1.Password, User.Password)
 }
 
-func TestUpdateCustomerUsingForUpdate(t *testing.T) {
+func TestUpdateUserUsingForUpdate(t *testing.T) {
 	var err error
-	customer := createRandomCustomer(t)
-	arg := UpdateCustomerParams{
+	User := createRandomUser(t)
+	arg := UpdateUserParams{
 		Password: pgtype.Text{String: util.RandomString(9), Valid: true},
-		ID:       customer.ID,
+		ID:       User.ID,
 	}
-	customer, err = testStore.GetCustomerForUpdate(context.Background(), customer.ID)
+	User, err = testStore.GetUserForUpdate(context.Background(), User.ID)
 	if err != nil {
 		log.Println(err.Error())
 	}
-	udatedCustomer, err := testStore.UpdateCustomer(context.Background(), arg)
+	udatedUser, err := testStore.UpdateUser(context.Background(), arg)
 	if err != nil {
 		log.Println(err)
 	}
 	require.NoError(t, err)
-	require.NotEqual(t, customer, udatedCustomer)
-	require.NotEqual(t, customer.Password, udatedCustomer.Password)
+	require.NotEqual(t, User, udatedUser)
+	require.NotEqual(t, User.Password, udatedUser.Password)
 }

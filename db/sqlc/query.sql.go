@@ -11,8 +11,8 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createCustomer = `-- name: CreateCustomer :one
-INSERT INTO customers (
+const createUser = `-- name: CreateUser :one
+INSERT INTO users (
   role_id,
   first_name,
   middle_name,
@@ -31,7 +31,7 @@ INSERT INTO customers (
 RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at
 `
 
-type CreateCustomerParams struct {
+type CreateUserParams struct {
 	RoleID      pgtype.Int4 `json:"role_id"`
 	FirstName   string      `json:"first_name"`
 	MiddleName  string      `json:"middle_name"`
@@ -46,8 +46,8 @@ type CreateCustomerParams struct {
 	CreateUser  int32       `json:"create_user"`
 }
 
-func (q *Queries) CreateCustomer(ctx context.Context, arg CreateCustomerParams) (Customer, error) {
-	row := q.db.QueryRow(ctx, createCustomer,
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, createUser,
 		arg.RoleID,
 		arg.FirstName,
 		arg.MiddleName,
@@ -61,7 +61,7 @@ func (q *Queries) CreateCustomer(ctx context.Context, arg CreateCustomerParams) 
 		arg.StatusID,
 		arg.CreateUser,
 	)
-	var i Customer
+	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.UniqueID,
@@ -84,24 +84,24 @@ func (q *Queries) CreateCustomer(ctx context.Context, arg CreateCustomerParams) 
 	return i, err
 }
 
-const deleteCustomer = `-- name: DeleteCustomer :exec
-DELETE FROM customers
+const deleteUser = `-- name: DeleteUser :exec
+DELETE FROM users
 WHERE id = $1
 `
 
-func (q *Queries) DeleteCustomer(ctx context.Context, id int64) error {
-	_, err := q.db.Exec(ctx, deleteCustomer, id)
+func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
+	_, err := q.db.Exec(ctx, deleteUser, id)
 	return err
 }
 
-const getCustomer = `-- name: GetCustomer :one
-SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM customers
+const getUser = `-- name: GetUser :one
+SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM users
 WHERE id=$1 LIMIT 1
 `
 
-func (q *Queries) GetCustomer(ctx context.Context, id int64) (Customer, error) {
-	row := q.db.QueryRow(ctx, getCustomer, id)
-	var i Customer
+func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
+	row := q.db.QueryRow(ctx, getUser, id)
+	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.UniqueID,
@@ -124,15 +124,15 @@ func (q *Queries) GetCustomer(ctx context.Context, id int64) (Customer, error) {
 	return i, err
 }
 
-const getCustomerForUpdate = `-- name: GetCustomerForUpdate :one
-SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM customers
+const getUserForUpdate = `-- name: GetUserForUpdate :one
+SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM users
 WHERE id=$1 LIMIT 1
 FOR NO KEY UPDATE
 `
 
-func (q *Queries) GetCustomerForUpdate(ctx context.Context, id int64) (Customer, error) {
-	row := q.db.QueryRow(ctx, getCustomerForUpdate, id)
-	var i Customer
+func (q *Queries) GetUserForUpdate(ctx context.Context, id int64) (User, error) {
+	row := q.db.QueryRow(ctx, getUserForUpdate, id)
+	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.UniqueID,
@@ -155,27 +155,27 @@ func (q *Queries) GetCustomerForUpdate(ctx context.Context, id int64) (Customer,
 	return i, err
 }
 
-const listCustomers = `-- name: ListCustomers :many
-SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM customers
+const listusers = `-- name: Listusers :many
+SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM users
 ORDER BY id
 LIMIT $1
 OFFSET $2
 `
 
-type ListCustomersParams struct {
+type ListusersParams struct {
 	Limit  int32 `json:"limit"`
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListCustomers(ctx context.Context, arg ListCustomersParams) ([]Customer, error) {
-	rows, err := q.db.Query(ctx, listCustomers, arg.Limit, arg.Offset)
+func (q *Queries) Listusers(ctx context.Context, arg ListusersParams) ([]User, error) {
+	rows, err := q.db.Query(ctx, listusers, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Customer{}
+	items := []User{}
 	for rows.Next() {
-		var i Customer
+		var i User
 		if err := rows.Scan(
 			&i.ID,
 			&i.UniqueID,
@@ -205,21 +205,21 @@ func (q *Queries) ListCustomers(ctx context.Context, arg ListCustomersParams) ([
 	return items, nil
 }
 
-const updateCustomer = `-- name: UpdateCustomer :one
-UPDATE customers
+const updateUser = `-- name: UpdateUser :one
+UPDATE users
 set password = $1
 WHERE id = $2
 RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at
 `
 
-type UpdateCustomerParams struct {
+type UpdateUserParams struct {
 	Password pgtype.Text `json:"password"`
 	ID       int64       `json:"id"`
 }
 
-func (q *Queries) UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) (Customer, error) {
-	row := q.db.QueryRow(ctx, updateCustomer, arg.Password, arg.ID)
-	var i Customer
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, updateUser, arg.Password, arg.ID)
+	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.UniqueID,
