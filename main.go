@@ -12,11 +12,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	dbSource = "postgresql://root:secret@localhost:5432/carzorro?sslmode=disable"
-	addresss = "127.0.0.1:8080"
-)
-
 func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
@@ -29,7 +24,7 @@ func main() {
 	}
 	queries := db.NewStore(connPool)
 	server := api.NewServer(queries)
-	err = server.Start(addresss)
+	err = server.Start(config.HTTPServerAddress)
 	if err != nil {
 		log.Fatal(err)
 	}
