@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomUser(t *testing.T) User {
+func createRandomUser(t *testing.T) CzUser {
 	arg := CreateUserParams{
 		RoleID:     pgtype.Int4{Int32: int32(100), Valid: true},
 		FirstName:  util.RandomString(10),

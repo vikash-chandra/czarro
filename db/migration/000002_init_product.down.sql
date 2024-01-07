@@ -1,2 +1,2 @@
-DROP TABLE IF EXISTS services;
-DROP TABLE IF EXISTS notifications;
+DROP TABLE IF EXISTS cz_services;
+DROP TABLE IF EXISTS cz_notifications;

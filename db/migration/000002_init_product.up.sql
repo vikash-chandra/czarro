@@ -1,4 +1,4 @@
-CREATE TABLE "notifications" (
+CREATE TABLE "cz_notifications" (
   "id" integer,
   "status" varchar NOT NULL DEFAULT 'Suspended',
   "create_user" integer NOT NULL DEFAULT 0,
@@ -7,7 +7,7 @@ CREATE TABLE "notifications" (
   "modified_at" timestamptz
 );
 
-CREATE TABLE "services" (
+CREATE TABLE "cz_services" (
   "id" integer PRIMARY KEY,
   "title" varchar(50),
   "short_name" varchar(30),

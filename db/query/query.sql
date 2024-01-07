@@ -1,5 +1,5 @@
 -- name: CreateUser :one
-INSERT INTO users (
+INSERT INTO cz_users (
   role_id,
   first_name,
   middle_name,
@@ -18,26 +18,26 @@ INSERT INTO users (
 RETURNING *;
 
 -- name: GetUser :one
-SELECT * FROM users
+SELECT * FROM cz_users
 WHERE id=$1 LIMIT 1;
 
 -- name: Listusers :many
-SELECT * FROM users
+SELECT * FROM cz_users
 ORDER BY id
 LIMIT $1
 OFFSET $2;
 
 -- name: UpdateUser :one
-UPDATE users
+UPDATE cz_users
 set password = $1
 WHERE id = $2
 RETURNING *;
 
 -- name: DeleteUser :exec
-DELETE FROM users
+DELETE FROM cz_users
 WHERE id = $1;
 
 -- name: GetUserForUpdate :one
-SELECT * FROM users
+SELECT * FROM cz_users
 WHERE id=$1 LIMIT 1
 FOR NO KEY UPDATE;
