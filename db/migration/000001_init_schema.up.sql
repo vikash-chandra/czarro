@@ -1,5 +1,12 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+CREATE TABLE "cz_status" (
+  "id" serial PRIMARY KEY,
+  "status" varchar(50) NOT NULL,
+  "description" varchar(100) NOT NULL DEFAULT '',
+  "visible" boolean NOT NULL DEFAULT false
+);
+
 CREATE TABLE "cz_country" (
   "id" serial PRIMARY KEY,
   "iso" varchar(2) NOT NULL,
@@ -93,9 +100,13 @@ ALTER TABLE "cz_users_address" ADD FOREIGN KEY ("user_id") REFERENCES "cz_users"
 
 ALTER TABLE "cz_users_address" ADD FOREIGN KEY ("country_code") REFERENCES "cz_country" ("id");
 
-
 INSERT INTO cz_roles (id, role_name, status_id, visible) 
 VALUES (100, 'user', 1, true);
+
+INSERT INTO cz_status (id, status, description, visible) VALUES 
+(1, 'active', 'for active', true),
+(2, 'suspended', 'for active', true),
+(3, 'inactive', 'for active', true);
 
 INSERT INTO cz_country (id, iso, name, nicename, iso3, numcode, phone_code) VALUES
 (1, 'AF', 'AFGHANISTAN', 'Afghanistan', 'AFG', 4, 93),

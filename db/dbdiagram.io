@@ -2,6 +2,13 @@
 // Docs: https://dbml.dbdiagram.io/docs
 // vikash1111@mailinator.com 
 
+Table cz_status {
+  id serial [primary key]
+  status varchar(50) [not null]
+  description varchar(100) [not null, default:'']
+  visible boolean [not null, default:false]
+}
+
 Table cz_country {
   id serial [primary key]
   iso varchar(2) [not null]
@@ -92,5 +99,3 @@ Table cz_services {
   created_at timestamptz [not null, default: `now()`]
   modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
 }
-
-

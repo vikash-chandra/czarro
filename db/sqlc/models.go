@@ -53,6 +53,13 @@ type CzService struct {
 	ModifiedAt       time.Time `json:"modified_at"`
 }
 
+type CzStatus struct {
+	ID          int32  `json:"id"`
+	Status      string `json:"status"`
+	Description string `json:"description"`
+	Visible     bool   `json:"visible"`
+}
+
 type CzUser struct {
 	ID          int64     `json:"id"`
 	UniqueID    uuid.UUID `json:"unique_id"`
