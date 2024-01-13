@@ -7,82 +7,84 @@ package db
 import (
 	"time"
 
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
+type CzCountry struct {
+	ID        int32  `json:"id"`
+	Iso       string `json:"iso"`
+	Name      string `json:"name"`
+	Nicename  string `json:"nicename"`
+	Iso3      string `json:"iso3"`
+	Numcode   int32  `json:"numcode"`
+	PhoneCode int32  `json:"phone_code"`
+}
+
 type CzNotification struct {
-	ID         pgtype.Int4        `json:"id"`
-	Status     string             `json:"status"`
-	CreateUser int32              `json:"create_user"`
-	ModifyUser pgtype.Int4        `json:"modify_user"`
-	CreatedAt  time.Time          `json:"created_at"`
-	ModifiedAt pgtype.Timestamptz `json:"modified_at"`
+	ID         int64     `json:"id"`
+	StatusID   int32     `json:"status_id"`
+	CreateUser int64     `json:"create_user"`
+	ModifyUser int64     `json:"modify_user"`
+	CreatedAt  time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 type CzRole struct {
-	RoleID     int32              `json:"role_id"`
-	RoleName   pgtype.Text        `json:"role_name"`
-	StatusID   pgtype.Int4        `json:"status_id"`
-	CreateUser int32              `json:"create_user"`
-	ModifyUser pgtype.Int4        `json:"modify_user"`
-	CreatedAt  time.Time          `json:"created_at"`
-	ModifiedAt pgtype.Timestamptz `json:"modified_at"`
-	Visible    bool               `json:"visible"`
+	ID         int32     `json:"id"`
+	RoleName   string    `json:"role_name"`
+	StatusID   int32     `json:"status_id"`
+	CreateUser int64     `json:"create_user"`
+	ModifyUser int64     `json:"modify_user"`
+	CreatedAt  time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
+	Visible    bool      `json:"visible"`
 }
 
 type CzService struct {
-	ID               int32              `json:"id"`
-	Title            pgtype.Text        `json:"title"`
-	ShortName        pgtype.Text        `json:"short_name"`
-	Description      pgtype.Text        `json:"description"`
-	SendNotification pgtype.Int4        `json:"send_notification"`
-	Status           string             `json:"status"`
-	CreateUser       int32              `json:"create_user"`
-	ModifyUser       pgtype.Int4        `json:"modify_user"`
-	CreatedAt        time.Time          `json:"created_at"`
-	ModifiedAt       pgtype.Timestamptz `json:"modified_at"`
-}
-
-type CzStatus struct {
-	ID         int32              `json:"id"`
-	UserStatus string             `json:"user_status"`
-	CreateUser int32              `json:"create_user"`
-	ModifyUser pgtype.Int4        `json:"modify_user"`
-	CreatedAt  time.Time          `json:"created_at"`
-	ModifiedAt pgtype.Timestamptz `json:"modified_at"`
+	ID               int32     `json:"id"`
+	Title            string    `json:"title"`
+	ShortName        string    `json:"short_name"`
+	Description      string    `json:"description"`
+	SendNotification int32     `json:"send_notification"`
+	StatusID         int32     `json:"status_id"`
+	CreateUser       int64     `json:"create_user"`
+	ModifyUser       int64     `json:"modify_user"`
+	CreatedAt        time.Time `json:"created_at"`
+	ModifiedAt       time.Time `json:"modified_at"`
 }
 
 type CzUser struct {
-	ID          int64              `json:"id"`
-	UniqueID    string             `json:"unique_id"`
-	RoleID      pgtype.Int4        `json:"role_id"`
-	FirstName   string             `json:"first_name"`
-	MiddleName  string             `json:"middle_name"`
-	LastName    string             `json:"last_name"`
-	Dob         pgtype.Date        `json:"dob"`
-	CountryCode string             `json:"country_code"`
-	Phone       string             `json:"phone"`
-	Email       pgtype.Text        `json:"email"`
-	Salt        pgtype.Text        `json:"salt"`
-	Password    pgtype.Text        `json:"password"`
-	StatusID    pgtype.Int4        `json:"status_id"`
-	CreateUser  int32              `json:"create_user"`
-	ModifyUser  pgtype.Int4        `json:"modify_user"`
-	CreatedAt   time.Time          `json:"created_at"`
-	ModifiedAt  pgtype.Timestamptz `json:"modified_at"`
+	ID          int64     `json:"id"`
+	UniqueID    uuid.UUID `json:"unique_id"`
+	RoleID      int32     `json:"role_id"`
+	FirstName   string    `json:"first_name"`
+	MiddleName  string    `json:"middle_name"`
+	LastName    string    `json:"last_name"`
+	Dob         time.Time `json:"dob"`
+	CountryCode int32     `json:"country_code"`
+	Phone       string    `json:"phone"`
+	Email       string    `json:"email"`
+	Salt        string    `json:"salt"`
+	Password    string    `json:"password"`
+	StatusID    int32     `json:"status_id"`
+	CreateUser  int64     `json:"create_user"`
+	ModifyUser  int64     `json:"modify_user"`
+	CreatedAt   time.Time `json:"created_at"`
+	ModifiedAt  time.Time `json:"modified_at"`
 }
 
 type CzUsersAddress struct {
-	ID         int64              `json:"id"`
-	UserID     pgtype.Int4        `json:"User_id"`
-	Address1   string             `json:"address1"`
-	Address2   pgtype.Text        `json:"address2"`
-	Address3   pgtype.Text        `json:"address3"`
-	Address4   pgtype.Text        `json:"address4"`
-	Location   string             `json:"location"`
-	StatusID   pgtype.Int4        `json:"status_id"`
-	CreateUser int32              `json:"create_user"`
-	ModifyUser pgtype.Int4        `json:"modify_user"`
-	CreatedAt  time.Time          `json:"created_at"`
-	ModifiedAt pgtype.Timestamptz `json:"modified_at"`
+	ID          int64     `json:"id"`
+	UserID      uuid.UUID `json:"user_id"`
+	CountryCode int32     `json:"country_code"`
+	Address1    string    `json:"address1"`
+	Address2    string    `json:"address2"`
+	Address3    string    `json:"address3"`
+	Address4    string    `json:"address4"`
+	Location    string    `json:"location"`
+	StatusID    int32     `json:"status_id"`
+	CreateUser  int64     `json:"create_user"`
+	ModifyUser  int64     `json:"modify_user"`
+	CreatedAt   time.Time `json:"created_at"`
+	ModifiedAt  time.Time `json:"modified_at"`
 }

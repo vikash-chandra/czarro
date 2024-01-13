@@ -2,44 +2,46 @@
 // Docs: https://dbml.dbdiagram.io/docs
 // vikash1111@mailinator.com 
 
-Table status {
-  id integer [primary key]
-  status varchar(20) [not null]
-  create_user integer [not null, default:0]
-  modify_user integer
-  created_at timestamptz [not null, default:`now()`]
-  modified_at timestamptz
+Table cz_country {
+  id serial [primary key]
+  iso varchar(2) [not null]
+  name varchar(80) [not null]
+  nicename varchar(80) [not null]
+  iso3 varchar(3) [not null]
+  numcode integer [not null,default:0]
+  phone_code integer [not null,default:0]
 }
 
-Table roles {
-  role_id integer [primary key]
-  role_name varchar(20)
-  status_id integer [ref: > status.id]
-  create_user integer [not null, default: 0]
-  modify_user integer 
+
+Table cz_roles {
+  id serial [primary key]
+  role_name varchar(20) [not null]
+  status_id integer [not null]
+  create_user bigserial [not null]
+  modify_user bigserial [not null]
   created_at timestamptz [not null, default: `now()`]
-  modified_at timestamptz
+  modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
   visible boolean [not null, default:true]
 }
 
-Table users {
-  id bigserial [primary key]
-  unique_id uuid [not null]
-  role_id integer [ref: > roles.role_id]
+Table cz_users {
+  id bigserial [not null]
+  unique_id uuid [primary key]
+  role_id integer [not null,ref: > cz_roles.id]
   first_name varchar [not null]
-  middle_name varchar
+  middle_name varchar [not null]
   last_name varchar [not null]
-  dob date
-  country_code varchar [not null]
+  dob timestamptz [not null, default:'0001-01-01']
+  country_code integer [not null,ref: > cz_country.id]
   phone varchar [not null]
-  email varchar
-  salt varchar
-  password varchar
-  status_id integer [ref: > status.id]
-  create_user integer [not null, default:0]
-  modify_user integer
+  email varchar [not null]
+  salt varchar [not null]
+  password varchar [not null]
+  status_id integer [not null]
+  create_user bigserial [not null]
+  modify_user bigserial [not null]
   created_at timestamptz [not null, default:`now()`]
-  modified_at timestamptz
+  modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
 
   Indexes {
     unique_id
@@ -47,48 +49,48 @@ Table users {
   }
 }
 
-Table users_address {
+Table cz_users_address {
   id bigserial [primary key]
-  User_id integer [ref: > users.unique_id]
-  address1 varchar [not null]
-  address2 varchar
-  address3 varchar
-  address4 varchar
-  location varchar [not null]
-  status_id integer [ref: > status.id]
-  create_user integer [not null, default:0]
-  modify_user integer 
+  user_id uuid [not null, ref: > cz_users.unique_id]
+  country_code integer [not null,ref: > cz_country.id]
+  address1 varchar(100) [not null]
+  address2 varchar(100) [not null]
+  address3 varchar(100) [not null]
+  address4 varchar(100) [not null]
+  location varchar(100) [not null]
+  status_id integer [not null]
+  create_user bigserial [not null]
+  modify_user bigserial [not null]
   created_at timestamptz [not null, default:`now()`]
-  modified_at timestamptz
+  modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
 
   Indexes {
-    User_id
+    user_id
   }
 }
 
 
-// Use DBML to define your database structure
-// Docs: https://dbml.dbdiagram.io/docs
-
-Table notification {
-  id integer
-  status varchar [not null, default: "Suspended"]
-  create_user integer [not null, default: 0]
-  modify_user integer
+Table cz_notification {
+  id bigserial [primary key]
+  status_id integer [not null,default:0]
+  create_user bigserial [not null]
+  modify_user bigserial [not null]
   created_at timestamptz [not null, default: `now()`]
-  modified_at timestamptz
+  modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
 }
 
 
-Table services {
-  id integer [primary key]
-  title varchar(50)
-  short_name varchar(30)
-  description text
-  send_notification integer
-  status varchar [not null, default: "Suspended"]
-  create_user integer [not null, default: 0]
-  modify_user integer
+Table cz_services {
+  id serial [primary key]
+  title varchar(50) [not null]
+  short_name varchar(30) [not null]
+  description text [not null]
+  send_notification integer [not null]
+  status_id integer [not null]
+  create_user bigserial [not null]
+  modify_user bigserial [not null]
   created_at timestamptz [not null, default: `now()`]
-  modified_at timestamptz
+  modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
 }
+
+

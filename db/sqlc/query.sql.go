@@ -7,8 +7,7 @@ package db
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
+	"time"
 )
 
 const createUser = `-- name: CreateUser :one
@@ -32,18 +31,18 @@ RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, count
 `
 
 type CreateUserParams struct {
-	RoleID      pgtype.Int4 `json:"role_id"`
-	FirstName   string      `json:"first_name"`
-	MiddleName  string      `json:"middle_name"`
-	LastName    string      `json:"last_name"`
-	Dob         pgtype.Date `json:"dob"`
-	CountryCode string      `json:"country_code"`
-	Phone       string      `json:"phone"`
-	Email       pgtype.Text `json:"email"`
-	Salt        pgtype.Text `json:"salt"`
-	Password    pgtype.Text `json:"password"`
-	StatusID    pgtype.Int4 `json:"status_id"`
-	CreateUser  int32       `json:"create_user"`
+	RoleID      int32     `json:"role_id"`
+	FirstName   string    `json:"first_name"`
+	MiddleName  string    `json:"middle_name"`
+	LastName    string    `json:"last_name"`
+	Dob         time.Time `json:"dob"`
+	CountryCode int32     `json:"country_code"`
+	Phone       string    `json:"phone"`
+	Email       string    `json:"email"`
+	Salt        string    `json:"salt"`
+	Password    string    `json:"password"`
+	StatusID    int32     `json:"status_id"`
+	CreateUser  int64     `json:"create_user"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CzUser, error) {
@@ -213,8 +212,8 @@ RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, count
 `
 
 type UpdateUserParams struct {
-	Password pgtype.Text `json:"password"`
-	ID       int64       `json:"id"`
+	Password string `json:"password"`
+	ID       int64  `json:"id"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (CzUser, error) {

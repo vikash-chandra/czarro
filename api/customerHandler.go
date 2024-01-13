@@ -12,7 +12,7 @@ type CreateUserRequest struct {
 	FirstName   string `json:"first_name" binding:"required,alphanum"`
 	LastName    string `json:"last_name" binding:"required,alphanum"`
 	Phone       string `json:"phone" binding:"required,num"`
-	CountryCode string `json:"country_code" binding:"required,alphanum"`
+	CountryCode int32  `json:"country_code" binding:"required,num"`
 }
 
 func (s *Server) CreateUser(ctx *gin.Context) {

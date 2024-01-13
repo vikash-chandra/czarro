@@ -13,9 +13,14 @@ func init() {
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 }
 
-// RandomInt generates a random integer between min and max
-func RandomInt(min, max int64) int64 {
+// RandomInt64 generates a random integer between min and max
+func RandomInt64(min, max int64) int64 {
 	return min + rand.Int63n(max-min+1)
+}
+
+// RandomInt generates a random integer between min and max
+func RandomInt(min, max int) int {
+	return min + rand.Intn(max)
 }
 
 // RandomString generates a random string of length n

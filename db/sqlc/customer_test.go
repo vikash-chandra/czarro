@@ -8,30 +8,22 @@ import (
 	"time"
 
 	"github.com/czarro/util"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/stretchr/testify/require"
 )
 
 func createRandomUser(t *testing.T) CzUser {
 	arg := CreateUserParams{
-		RoleID:     pgtype.Int4{Int32: int32(100), Valid: true},
-		FirstName:  util.RandomString(10),
-		MiddleName: util.RandomString(5),
-		LastName:   util.RandomString(4),
-		Dob: pgtype.Date{
-			Time: time.Date(int(util.RandomInt(1900, 2023)),
-				time.Month(util.RandomInt(1, 12)),
-				int(util.RandomInt(1, 28)),
-				0, 0, 0, 0, time.UTC,
-			),
-			Valid: true,
-		},
-		CountryCode: "+91",
-		Phone:       fmt.Sprintf("%d", util.RandomInt(600000000, 999999999)),
-		Email:       pgtype.Text{String: util.RandomEmail(), Valid: true},
-		Password:    pgtype.Text{String: util.RandomString(8), Valid: true},
-		StatusID:    pgtype.Int4{Int32: 1, Valid: true},
-		CreateUser:  int32(12),
+		RoleID:      100,
+		FirstName:   util.RandomString(10),
+		MiddleName:  util.RandomString(5),
+		LastName:    util.RandomString(4),
+		Dob:         time.Date(util.RandomInt(1900, 2024), time.February, util.RandomInt(1, 31), 0, 0, 0, 0, time.Local),
+		CountryCode: int32(util.RandomInt(1, 1)),
+		Phone:       fmt.Sprintf("%d", util.RandomInt64(600000000, 999999999)),
+		Email:       util.RandomEmail(),
+		Password:    util.RandomString(8),
+		StatusID:    int32(util.RandomInt(100, 100)),
+		CreateUser:  util.RandomInt64(1, 1000000),
 	}
 	User, err := testStore.CreateUser(context.Background(), arg)
 	require.NoError(t, err)
@@ -74,7 +66,7 @@ func TestGetListUser(t *testing.T) {
 func TestUpdateUser(t *testing.T) {
 	User1 := createRandomUser(t)
 	arg := UpdateUserParams{
-		Password: pgtype.Text{String: util.RandomString(9), Valid: true},
+		Password: util.RandomString(10),
 		ID:       User1.ID,
 	}
 	User, err := testStore.UpdateUser(context.Background(), arg)
@@ -87,7 +79,7 @@ func TestUpdateUserUsingForUpdate(t *testing.T) {
 	var err error
 	User := createRandomUser(t)
 	arg := UpdateUserParams{
-		Password: pgtype.Text{String: util.RandomString(9), Valid: true},
+		Password: util.RandomString(10),
 		ID:       User.ID,
 	}
 	User, err = testStore.GetUserForUpdate(context.Background(), User.ID)
