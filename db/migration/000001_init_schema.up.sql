@@ -29,8 +29,8 @@ CREATE TABLE "cz_roles" (
 );
 
 CREATE TABLE "cz_users" (
-  "id" bigserial NOT NULL,
-  "unique_id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() UNIQUE,
+  "id" bigserial PRIMARY KEY,
+  "unique_id" uuid NOT NULL DEFAULT uuid_generate_v4() UNIQUE,
   "role_id" integer NOT NULL,
   "first_name" varchar NOT NULL,
   "middle_name" varchar NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE "cz_users" (
 
 CREATE TABLE "cz_users_address" (
   "id" bigserial PRIMARY KEY,
-  "user_id" uuid NOT NULL,
+  "user_id" bigserial NOT NULL,
   "country_code" integer NOT NULL,
   "address1" varchar(100) NOT NULL,
   "address2" varchar(100) NOT NULL,
@@ -96,7 +96,7 @@ ALTER TABLE "cz_users" ADD FOREIGN KEY ("role_id") REFERENCES "cz_roles" ("id");
 
 ALTER TABLE "cz_users" ADD FOREIGN KEY ("country_code") REFERENCES "cz_country" ("id");
 
-ALTER TABLE "cz_users_address" ADD FOREIGN KEY ("user_id") REFERENCES "cz_users" ("unique_id");
+ALTER TABLE "cz_users_address" ADD FOREIGN KEY ("user_id") REFERENCES "cz_users" ("id");
 
 ALTER TABLE "cz_users_address" ADD FOREIGN KEY ("country_code") REFERENCES "cz_country" ("id");
 

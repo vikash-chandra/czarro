@@ -45,11 +45,15 @@ func (s *Server) GetUser(ctx *gin.Context) {
 	var req getUserRequest
 	logger.Info("===>>>" + ctx.Request.RequestURI)
 	if err := ctx.ShouldBindUri(&req); err != nil {
+		fmt.Println(err.Error())
+		fmt.Println("==========")
 		ctx.JSON(http.StatusBadRequest, err)
+		return
 	}
-
+	fmt.Println(req.ID)
 	User, err := s.store.GetUser(ctx, req.ID)
 	if err != nil {
+		fmt.Println(err.Error())
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}

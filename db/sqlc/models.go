@@ -82,7 +82,7 @@ type CzUser struct {
 
 type CzUsersAddress struct {
 	ID          int64     `json:"id"`
-	UserID      uuid.UUID `json:"user_id"`
+	UserID      int64     `json:"user_id"`
 	CountryCode int32     `json:"country_code"`
 	Address1    string    `json:"address1"`
 	Address2    string    `json:"address2"`
