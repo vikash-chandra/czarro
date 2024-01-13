@@ -16,7 +16,7 @@ type CzCountry struct {
 	Name      string `json:"name"`
 	Nicename  string `json:"nicename"`
 	Iso3      string `json:"iso3"`
-	Numcode   int32  `json:"numcode"`
+	Numcode   string `json:"numcode"`
 	PhoneCode int32  `json:"phone_code"`
 }
 

@@ -8,7 +8,7 @@ Table cz_country {
   name varchar(80) [not null]
   nicename varchar(80) [not null]
   iso3 varchar(3) [not null]
-  numcode integer [not null,default:0]
+  numcode varchar(6) [not null,default:'']
   phone_code integer [not null,default:0]
 }
 
