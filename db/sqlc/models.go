@@ -20,13 +20,20 @@ type CzCountry struct {
 	PhoneCode int32  `json:"phone_code"`
 }
 
-type CzNotification struct {
-	ID         int64     `json:"id"`
-	StatusID   int32     `json:"status_id"`
-	CreateUser int64     `json:"create_user"`
-	ModifyUser int64     `json:"modify_user"`
-	CreatedAt  time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+type CzProduct struct {
+	ID          int32     `json:"id"`
+	Title       string    `json:"title"`
+	ShortName   string    `json:"short_name"`
+	Description string    `json:"description"`
+	SmsNoti     bool      `json:"sms_noti"`
+	EmailNoti   bool      `json:"email_noti"`
+	CallNoti    bool      `json:"call_noti"`
+	Image       string    `json:"image"`
+	StatusID    int32     `json:"status_id"`
+	CreateUser  int64     `json:"create_user"`
+	ModifyUser  int64     `json:"modify_user"`
+	CreatedAt   time.Time `json:"created_at"`
+	ModifiedAt  time.Time `json:"modified_at"`
 }
 
 type CzRole struct {
@@ -38,19 +45,6 @@ type CzRole struct {
 	CreatedAt  time.Time `json:"created_at"`
 	ModifiedAt time.Time `json:"modified_at"`
 	Visible    bool      `json:"visible"`
-}
-
-type CzService struct {
-	ID               int32     `json:"id"`
-	Title            string    `json:"title"`
-	ShortName        string    `json:"short_name"`
-	Description      string    `json:"description"`
-	SendNotification int32     `json:"send_notification"`
-	StatusID         int32     `json:"status_id"`
-	CreateUser       int64     `json:"create_user"`
-	ModifyUser       int64     `json:"modify_user"`
-	CreatedAt        time.Time `json:"created_at"`
-	ModifiedAt       time.Time `json:"modified_at"`
 }
 
 type CzStatus struct {

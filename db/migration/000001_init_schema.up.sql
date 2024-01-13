@@ -64,22 +64,16 @@ CREATE TABLE "cz_users_address" (
   "modified_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00+00'
 );
 
-CREATE TABLE "cz_notification" (
-  "id" bigserial PRIMARY KEY,
-  "status_id" integer NOT NULL DEFAULT 0,
-  "create_user" bigint NOT NULL DEFAULT 0,
-  "modify_user" bigint NOT NULL DEFAULT 0,
-  "created_at" timestamptz NOT NULL DEFAULT (now()),
-  "modified_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00+00'
-);
-
-CREATE TABLE "cz_services" (
+CREATE TABLE "cz_products" (
   "id" serial PRIMARY KEY,
   "title" varchar(50) NOT NULL,
   "short_name" varchar(30) NOT NULL,
   "description" text NOT NULL,
-  "send_notification" integer NOT NULL,
-  "status_id" integer NOT NULL,
+  "sms_noti" boolean NOT NULL DEFAULT false,
+  "email_noti" boolean NOT NULL DEFAULT false,
+  "call_noti" boolean NOT NULL DEFAULT false,
+  "image" varchar(100) NOT NULL DEFAULT '',
+  "status_id" integer NOT NULL DEFAULT 0,
   "create_user" bigint NOT NULL DEFAULT 0,
   "modify_user" bigint NOT NULL DEFAULT 0,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
@@ -91,6 +85,8 @@ CREATE INDEX ON "cz_users" ("unique_id");
 CREATE INDEX ON "cz_users" ("phone");
 
 CREATE INDEX ON "cz_users_address" ("user_id");
+
+CREATE INDEX ON "cz_products" ("id");
 
 ALTER TABLE "cz_users" ADD FOREIGN KEY ("role_id") REFERENCES "cz_roles" ("id");
 

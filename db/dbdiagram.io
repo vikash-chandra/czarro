@@ -24,16 +24,16 @@ Table cz_roles {
   id serial [primary key]
   role_name varchar(20) [not null]
   status_id integer [not null]
-  create_user bigserial [not null]
-  modify_user bigserial [not null]
+  create_user bigint [not null,default:0]
+  modify_user bigint [not null,default:0]
   created_at timestamptz [not null, default: `now()`]
   modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
   visible boolean [not null, default:true]
 }
 
 Table cz_users {
-  id bigserial [not null]
-  unique_id uuid [primary key]
+  id bigserial [primary key]
+  unique_id uuid [not null]
   role_id integer [not null,ref: > cz_roles.id]
   first_name varchar [not null]
   middle_name varchar [not null]
@@ -45,8 +45,8 @@ Table cz_users {
   salt varchar [not null]
   password varchar [not null]
   status_id integer [not null]
-  create_user bigserial [not null]
-  modify_user bigserial [not null]
+  create_user bigint [not null,default:0]
+  modify_user bigint [not null,default:0]
   created_at timestamptz [not null, default:`now()`]
   modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
 
@@ -58,7 +58,7 @@ Table cz_users {
 
 Table cz_users_address {
   id bigserial [primary key]
-  user_id uuid [not null, ref: > cz_users.unique_id]
+  user_id bigserial [not null, ref: > cz_users.id]
   country_code integer [not null,ref: > cz_country.id]
   address1 varchar(100) [not null]
   address2 varchar(100) [not null]
@@ -66,8 +66,8 @@ Table cz_users_address {
   address4 varchar(100) [not null]
   location varchar(100) [not null]
   status_id integer [not null]
-  create_user bigserial [not null]
-  modify_user bigserial [not null]
+  create_user bigint [not null,default:0]
+  modify_user bigint [not null,default:0]
   created_at timestamptz [not null, default:`now()`]
   modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
 
@@ -76,26 +76,22 @@ Table cz_users_address {
   }
 }
 
-
-Table cz_notification {
-  id bigserial [primary key]
-  status_id integer [not null,default:0]
-  create_user bigserial [not null]
-  modify_user bigserial [not null]
-  created_at timestamptz [not null, default: `now()`]
-  modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
-}
-
-
-Table cz_services {
+Table cz_products {
   id serial [primary key]
   title varchar(50) [not null]
   short_name varchar(30) [not null]
   description text [not null]
-  send_notification integer [not null]
-  status_id integer [not null]
-  create_user bigserial [not null]
-  modify_user bigserial [not null]
+  sms_noti boolean [not null, default:false]
+  email_noti boolean [not null, default:false]
+  call_noti boolean [not null, default:false]
+  image varchar(100) [not null, default:'']
+  status_id integer [not null, default:0]
+  create_user bigint [not null,default:0]
+  modify_user bigint [not null,default:0]
   created_at timestamptz [not null, default: `now()`]
   modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
+
+   Indexes {
+    id
+  }
 }
