@@ -21,8 +21,8 @@ CREATE TABLE "cz_roles" (
   "id" serial PRIMARY KEY,
   "role_name" varchar(20) NOT NULL,
   "status_id" integer NOT NULL,
-  "create_user" bigserial NOT NULL,
-  "modify_user" bigserial NOT NULL,
+  "create_user" bigint NOT NULL DEFAULT 0,
+  "modify_user" bigint NOT NULL DEFAULT 0,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "modified_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00+00',
   "visible" boolean NOT NULL DEFAULT true
@@ -42,8 +42,8 @@ CREATE TABLE "cz_users" (
   "salt" varchar NOT NULL,
   "password" varchar NOT NULL,
   "status_id" integer NOT NULL,
-  "create_user" bigserial NOT NULL,
-  "modify_user" bigserial NOT NULL,
+  "create_user" bigint NOT NULL DEFAULT 0,
+  "modify_user" bigint NOT NULL DEFAULT 0,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "modified_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00+00'
 );
@@ -58,8 +58,8 @@ CREATE TABLE "cz_users_address" (
   "address4" varchar(100) NOT NULL,
   "location" varchar(100) NOT NULL,
   "status_id" integer NOT NULL,
-  "create_user" bigserial NOT NULL,
-  "modify_user" bigserial NOT NULL,
+  "create_user" bigint NOT NULL DEFAULT 0,
+  "modify_user" bigint NOT NULL DEFAULT 0,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "modified_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00+00'
 );
@@ -67,8 +67,8 @@ CREATE TABLE "cz_users_address" (
 CREATE TABLE "cz_notification" (
   "id" bigserial PRIMARY KEY,
   "status_id" integer NOT NULL DEFAULT 0,
-  "create_user" bigserial NOT NULL,
-  "modify_user" bigserial NOT NULL,
+  "create_user" bigint NOT NULL DEFAULT 0,
+  "modify_user" bigint NOT NULL DEFAULT 0,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "modified_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00+00'
 );
@@ -80,8 +80,8 @@ CREATE TABLE "cz_services" (
   "description" text NOT NULL,
   "send_notification" integer NOT NULL,
   "status_id" integer NOT NULL,
-  "create_user" bigserial NOT NULL,
-  "modify_user" bigserial NOT NULL,
+  "create_user" bigint NOT NULL DEFAULT 0,
+  "modify_user" bigint NOT NULL DEFAULT 0,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "modified_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00+00'
 );

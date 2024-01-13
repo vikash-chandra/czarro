@@ -8,11 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	DefaultRoleId int32 = 100
+)
+
 type CreateUserRequest struct {
 	FirstName   string `json:"first_name" binding:"required,alphanum"`
 	LastName    string `json:"last_name" binding:"required,alphanum"`
-	Phone       string `json:"phone" binding:"required,num"`
-	CountryCode int32  `json:"country_code" binding:"required,num"`
+	Phone       string `json:"phone" binding:"required"`
+	CountryCode int32  `json:"country_code" binding:"required"`
 }
 
 func (s *Server) CreateUser(ctx *gin.Context) {
@@ -26,15 +30,17 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		LastName:    req.LastName,
 		Phone:       req.Phone,
 		CountryCode: req.CountryCode,
+		RoleID:      DefaultRoleId,
 	}
-	fmt.Println(arg)
-	User, err := s.store.CreateUser(ctx, arg)
+	msg := fmt.Sprintf("arg %#+v", arg)
+	fmt.Println(msg)
+	user, err := s.store.CreateUser(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
-	logger.Info(fmt.Sprintf("%+v", User))
-	ctx.JSON(http.StatusOK, User)
+	logger.Info(fmt.Sprintf("%+v", user))
+	ctx.JSON(http.StatusOK, user)
 }
 
 type getUserRequest struct {
@@ -46,7 +52,6 @@ func (s *Server) GetUser(ctx *gin.Context) {
 	logger.Info("===>>>" + ctx.Request.RequestURI)
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		fmt.Println(err.Error())
-		fmt.Println("==========")
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
