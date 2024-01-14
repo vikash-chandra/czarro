@@ -9,14 +9,15 @@ import (
 )
 
 const (
-	DefaultRoleId int32 = 100
+	DefaultRoleId   int32 = 100
+	DefaultStatusId int32 = 1
 )
 
 type CreateUserRequest struct {
-	FirstName   string `json:"first_name" binding:"required,alphanum"`
-	LastName    string `json:"last_name" binding:"required,alphanum"`
+	FirstName   string `json:"firstName" binding:"required,alphanum"`
+	LastName    string `json:"lastName" binding:"required,alphanum"`
 	Phone       string `json:"phone" binding:"required"`
-	CountryCode int32  `json:"country_code" binding:"required"`
+	CountryCode int32  `json:"countryCode" binding:"required"`
 }
 
 func (s *Server) CreateUser(ctx *gin.Context) {
@@ -31,6 +32,7 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		Phone:       req.Phone,
 		CountryCode: req.CountryCode,
 		RoleID:      DefaultRoleId,
+		StatusID:    DefaultStatusId,
 	}
 	msg := fmt.Sprintf("arg %#+v", arg)
 	fmt.Println(msg)
