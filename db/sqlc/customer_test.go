@@ -22,7 +22,7 @@ func createRandomUser(t *testing.T) CzUser {
 		Phone:       fmt.Sprintf("%d", util.RandomInt64(600000000, 999999999)),
 		Email:       util.RandomEmail(),
 		Password:    util.RandomString(8),
-		StatusID:    int32(util.RandomInt(100, 100)),
+		StatusID:    int32(util.RandomInt(1, 3)),
 		CreateUser:  util.RandomInt64(1, 1000000),
 	}
 	User, err := testStore.CreateUser(context.Background(), arg)

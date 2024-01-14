@@ -7,6 +7,13 @@ CREATE TABLE "cz_status" (
   "visible" boolean NOT NULL DEFAULT false
 );
 
+CREATE TABLE "cz_currency" (
+  "id" serial PRIMARY KEY,
+  "currency" varchar(50) NOT NULL DEFAULT 'INR',
+  "description" varchar(100) NOT NULL DEFAULT '',
+  "visible" boolean NOT NULL DEFAULT false
+);
+
 CREATE TABLE "cz_country" (
   "id" serial PRIMARY KEY,
   "iso" varchar(2) NOT NULL,
@@ -73,6 +80,8 @@ CREATE TABLE "cz_products" (
   "email_noti" boolean NOT NULL DEFAULT false,
   "call_noti" boolean NOT NULL DEFAULT false,
   "image" varchar(100) NOT NULL DEFAULT '',
+  "currency_id" integer NOT NULL,
+  "price" float NOT NULL DEFAULT 0,
   "status_id" integer NOT NULL DEFAULT 0,
   "create_user" bigint NOT NULL DEFAULT 0,
   "modify_user" bigint NOT NULL DEFAULT 0,
@@ -92,17 +101,28 @@ ALTER TABLE "cz_users" ADD FOREIGN KEY ("role_id") REFERENCES "cz_roles" ("id");
 
 ALTER TABLE "cz_users" ADD FOREIGN KEY ("country_code") REFERENCES "cz_country" ("id");
 
+ALTER TABLE "cz_users" ADD FOREIGN KEY ("status_id") REFERENCES "cz_status" ("id");
+
 ALTER TABLE "cz_users_address" ADD FOREIGN KEY ("user_id") REFERENCES "cz_users" ("id");
 
 ALTER TABLE "cz_users_address" ADD FOREIGN KEY ("country_code") REFERENCES "cz_country" ("id");
 
-INSERT INTO cz_roles (id, role_name, status_id, visible) 
-VALUES (100, 'user', 1, true);
+ALTER TABLE "cz_products" ADD FOREIGN KEY ("currency_id") REFERENCES "cz_currency" ("id");
+
+INSERT INTO cz_roles (id, role_name, status_id, visible) VALUES 
+(100, 'user', 1, true),
+(300, 'washer', 1, true),
+(500, 'vender', 1, true),
+(700, 'supervisor', 1, true),
+(1000, 'admin', 1, true);
 
 INSERT INTO cz_status (id, status, description, visible) VALUES 
-(1, 'active', 'for active', true),
-(2, 'suspended', 'for active', true),
-(3, 'inactive', 'for active', true);
+(1, 'active', 'for active users', true),
+(2, 'inactive', 'for inactive users', true),
+(3, 'suspended', 'for suspended users', true);
+
+INSERT INTO cz_currency (id, currency, description, visible) VALUES
+(1, 'INR', 'payment in rupees indian currency', true);
 
 INSERT INTO cz_country (id, iso, name, nicename, iso3, numcode, phone_code) VALUES
 (1, 'AF', 'AFGHANISTAN', 'Afghanistan', 'AFG', 4, 93),

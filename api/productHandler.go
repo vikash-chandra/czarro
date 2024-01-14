@@ -10,14 +10,16 @@ import (
 )
 
 type CreateProductRequest struct {
-	Title       string `json:"title" binding:"required"`
-	ShortName   string `json:"shortName" binding:"required"`
-	Description string `json:"description" binding:"required"`
-	SmsNoti     *bool  `json:"smsNoti" binding:"required"`
-	EmailNoti   *bool  `json:"emailNoti" binding:"required"`
-	CallNoti    *bool  `json:"callNoti" binding:"required"`
-	Image       string `json:"image" binding:"required"`
-	Id          int32  `json:"id,omitempty"`
+	Title       string  `json:"title" binding:"required"`
+	ShortName   string  `json:"shortName" binding:"required"`
+	Description string  `json:"description" binding:"required"`
+	SmsNoti     *bool   `json:"smsNoti" binding:"required"`
+	EmailNoti   *bool   `json:"emailNoti" binding:"required"`
+	CallNoti    *bool   `json:"callNoti" binding:"required"`
+	Image       string  `json:"image" binding:"required"`
+	CurrencyId  int32   `json:"currencyId" binding:"required"`
+	Price       float64 `json:"price" binding:"required"`
+	Id          int32   `json:"id,omitempty"`
 }
 
 func (s *Server) CreateProduct(ctx *gin.Context) {
@@ -35,6 +37,8 @@ func (s *Server) CreateProduct(ctx *gin.Context) {
 		EmailNoti:   *req.EmailNoti,
 		CallNoti:    *req.CallNoti,
 		Image:       req.Image,
+		CurrencyID:  req.CurrencyId,
+		Price:       req.Price,
 		CreateUser:  10,
 	}
 	fmt.Println(args)
@@ -63,6 +67,8 @@ func (s *Server) UpdateProduct(ctx *gin.Context) {
 		EmailNoti:   *req.EmailNoti,
 		CallNoti:    *req.CallNoti,
 		Image:       req.Image,
+		CurrencyID:  req.CurrencyId,
+		Price:       req.Price,
 		ModifyUser:  10,
 		ID:          req.Id,
 		ModifiedAt:  time.Now().UTC(),

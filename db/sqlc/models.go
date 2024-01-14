@@ -20,6 +20,13 @@ type CzCountry struct {
 	PhoneCode int32  `json:"phone_code"`
 }
 
+type CzCurrency struct {
+	ID          int32  `json:"id"`
+	Currency    string `json:"currency"`
+	Description string `json:"description"`
+	Visible     bool   `json:"visible"`
+}
+
 type CzProduct struct {
 	ID          int32     `json:"id"`
 	Title       string    `json:"title"`
@@ -29,6 +36,8 @@ type CzProduct struct {
 	EmailNoti   bool      `json:"email_noti"`
 	CallNoti    bool      `json:"call_noti"`
 	Image       string    `json:"image"`
+	CurrencyID  int32     `json:"currency_id"`
+	Price       float64   `json:"price"`
 	StatusID    int32     `json:"status_id"`
 	CreateUser  int64     `json:"create_user"`
 	ModifyUser  int64     `json:"modify_user"`

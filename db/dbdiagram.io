@@ -9,6 +9,13 @@ Table cz_status {
   visible boolean [not null, default:false]
 }
 
+Table cz_currency {
+  id serial [primary key]
+  currency varchar(50) [not null, default:'INR']
+  description varchar(100) [not null, default:'']
+  visible boolean [not null, default:false]
+}
+
 Table cz_country {
   id serial [primary key]
   iso varchar(2) [not null]
@@ -44,7 +51,7 @@ Table cz_users {
   email varchar [not null]
   salt varchar [not null]
   password varchar [not null]
-  status_id integer [not null]
+  status_id integer [not null, ref: > cz_status.id]
   create_user bigint [not null,default:0]
   modify_user bigint [not null,default:0]
   created_at timestamptz [not null, default:`now()`]
@@ -85,6 +92,8 @@ Table cz_products {
   email_noti boolean [not null, default:false]
   call_noti boolean [not null, default:false]
   image varchar(100) [not null, default:'']
+  currency_id integer [not null, ref: > cz_currency.id]
+  price float [not null, default:0]
   status_id integer [not null, default:0]
   create_user bigint [not null,default:0]
   modify_user bigint [not null,default:0]

@@ -7,10 +7,12 @@ INSERT INTO cz_products (
   email_noti,
   call_noti,
   image,
+  currency_id,
+  price,
   status_id,
   create_user
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
 )
 RETURNING *;
 
@@ -34,10 +36,12 @@ SET
     email_noti = $5,
     call_noti = $6,
     image = $7,
-    status_id = $8,
-    modify_user = $9,
-    modified_at = $10
-WHERE id = $11
+    currency_id = $8,
+    price = $9,
+    status_id = $10,
+    modify_user = $11,
+    modified_at = $12
+WHERE id = $13
 RETURNING *;
 
 -- name: DeleteProduct :exec

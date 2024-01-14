@@ -19,24 +19,28 @@ INSERT INTO cz_products (
   email_noti,
   call_noti,
   image,
+  currency_id,
+  price,
   status_id,
   create_user
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
 )
-RETURNING id, title, short_name, description, sms_noti, email_noti, call_noti, image, status_id, create_user, modify_user, created_at, modified_at
+RETURNING id, title, short_name, description, sms_noti, email_noti, call_noti, image, currency_id, price, status_id, create_user, modify_user, created_at, modified_at
 `
 
 type CreateProductParams struct {
-	Title       string `json:"title"`
-	ShortName   string `json:"short_name"`
-	Description string `json:"description"`
-	SmsNoti     bool   `json:"sms_noti"`
-	EmailNoti   bool   `json:"email_noti"`
-	CallNoti    bool   `json:"call_noti"`
-	Image       string `json:"image"`
-	StatusID    int32  `json:"status_id"`
-	CreateUser  int64  `json:"create_user"`
+	Title       string  `json:"title"`
+	ShortName   string  `json:"short_name"`
+	Description string  `json:"description"`
+	SmsNoti     bool    `json:"sms_noti"`
+	EmailNoti   bool    `json:"email_noti"`
+	CallNoti    bool    `json:"call_noti"`
+	Image       string  `json:"image"`
+	CurrencyID  int32   `json:"currency_id"`
+	Price       float64 `json:"price"`
+	StatusID    int32   `json:"status_id"`
+	CreateUser  int64   `json:"create_user"`
 }
 
 func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (CzProduct, error) {
@@ -48,6 +52,8 @@ func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (C
 		arg.EmailNoti,
 		arg.CallNoti,
 		arg.Image,
+		arg.CurrencyID,
+		arg.Price,
 		arg.StatusID,
 		arg.CreateUser,
 	)
@@ -61,6 +67,8 @@ func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (C
 		&i.EmailNoti,
 		&i.CallNoti,
 		&i.Image,
+		&i.CurrencyID,
+		&i.Price,
 		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
@@ -81,7 +89,7 @@ func (q *Queries) DeleteProduct(ctx context.Context, id int32) error {
 }
 
 const getProduct = `-- name: GetProduct :one
-SELECT id, title, short_name, description, sms_noti, email_noti, call_noti, image, status_id, create_user, modify_user, created_at, modified_at FROM cz_products
+SELECT id, title, short_name, description, sms_noti, email_noti, call_noti, image, currency_id, price, status_id, create_user, modify_user, created_at, modified_at FROM cz_products
 WHERE id=$1 LIMIT 1
 `
 
@@ -97,6 +105,8 @@ func (q *Queries) GetProduct(ctx context.Context, id int32) (CzProduct, error) {
 		&i.EmailNoti,
 		&i.CallNoti,
 		&i.Image,
+		&i.CurrencyID,
+		&i.Price,
 		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
@@ -107,7 +117,7 @@ func (q *Queries) GetProduct(ctx context.Context, id int32) (CzProduct, error) {
 }
 
 const getProductForUpdate = `-- name: GetProductForUpdate :one
-SELECT id, title, short_name, description, sms_noti, email_noti, call_noti, image, status_id, create_user, modify_user, created_at, modified_at FROM cz_products
+SELECT id, title, short_name, description, sms_noti, email_noti, call_noti, image, currency_id, price, status_id, create_user, modify_user, created_at, modified_at FROM cz_products
 WHERE id=$1 LIMIT 1
 FOR NO KEY UPDATE
 `
@@ -124,6 +134,8 @@ func (q *Queries) GetProductForUpdate(ctx context.Context, id int32) (CzProduct,
 		&i.EmailNoti,
 		&i.CallNoti,
 		&i.Image,
+		&i.CurrencyID,
+		&i.Price,
 		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
@@ -134,7 +146,7 @@ func (q *Queries) GetProductForUpdate(ctx context.Context, id int32) (CzProduct,
 }
 
 const listProducts = `-- name: ListProducts :many
-SELECT id, title, short_name, description, sms_noti, email_noti, call_noti, image, status_id, create_user, modify_user, created_at, modified_at FROM cz_products
+SELECT id, title, short_name, description, sms_noti, email_noti, call_noti, image, currency_id, price, status_id, create_user, modify_user, created_at, modified_at FROM cz_products
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -163,6 +175,8 @@ func (q *Queries) ListProducts(ctx context.Context, arg ListProductsParams) ([]C
 			&i.EmailNoti,
 			&i.CallNoti,
 			&i.Image,
+			&i.CurrencyID,
+			&i.Price,
 			&i.StatusID,
 			&i.CreateUser,
 			&i.ModifyUser,
@@ -189,11 +203,13 @@ SET
     email_noti = $5,
     call_noti = $6,
     image = $7,
-    status_id = $8,
-    modify_user = $9,
-    modified_at = $10
-WHERE id = $11
-RETURNING id, title, short_name, description, sms_noti, email_noti, call_noti, image, status_id, create_user, modify_user, created_at, modified_at
+    currency_id = $8,
+    price = $9,
+    status_id = $10,
+    modify_user = $11,
+    modified_at = $12
+WHERE id = $13
+RETURNING id, title, short_name, description, sms_noti, email_noti, call_noti, image, currency_id, price, status_id, create_user, modify_user, created_at, modified_at
 `
 
 type UpdateProductsParams struct {
@@ -204,6 +220,8 @@ type UpdateProductsParams struct {
 	EmailNoti   bool      `json:"email_noti"`
 	CallNoti    bool      `json:"call_noti"`
 	Image       string    `json:"image"`
+	CurrencyID  int32     `json:"currency_id"`
+	Price       float64   `json:"price"`
 	StatusID    int32     `json:"status_id"`
 	ModifyUser  int64     `json:"modify_user"`
 	ModifiedAt  time.Time `json:"modified_at"`
@@ -219,6 +237,8 @@ func (q *Queries) UpdateProducts(ctx context.Context, arg UpdateProductsParams) 
 		arg.EmailNoti,
 		arg.CallNoti,
 		arg.Image,
+		arg.CurrencyID,
+		arg.Price,
 		arg.StatusID,
 		arg.ModifyUser,
 		arg.ModifiedAt,
@@ -234,6 +254,8 @@ func (q *Queries) UpdateProducts(ctx context.Context, arg UpdateProductsParams) 
 		&i.EmailNoti,
 		&i.CallNoti,
 		&i.Image,
+		&i.CurrencyID,
+		&i.Price,
 		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
