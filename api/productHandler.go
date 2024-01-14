@@ -10,23 +10,24 @@ import (
 )
 
 type CreateProductRequest struct {
-	Title       string  `json:"title" binding:"required"`
-	ShortName   string  `json:"shortName" binding:"required"`
-	Description string  `json:"description" binding:"required"`
-	SmsNoti     *bool   `json:"smsNoti" binding:"required"`
-	EmailNoti   *bool   `json:"emailNoti" binding:"required"`
-	CallNoti    *bool   `json:"callNoti" binding:"required"`
-	Image       string  `json:"image" binding:"required"`
-	CurrencyId  int32   `json:"currencyId" binding:"required"`
-	Price       float64 `json:"price" binding:"required"`
-	Id          int32   `json:"id,omitempty"`
+	Title        string  `json:"title" binding:"required"`
+	ShortName    string  `json:"shortName" binding:"required"`
+	Description  string  `json:"description" binding:"required"`
+	SmsNoti      *bool   `json:"smsNoti" binding:"required"`
+	EmailNoti    *bool   `json:"emailNoti" binding:"required"`
+	CallNoti     *bool   `json:"callNoti" binding:"required"`
+	Image        string  `json:"image" binding:"required"`
+	CurrencyId   int32   `json:"currencyId" binding:"required"`
+	Price        float64 `json:"price" binding:"required"`
+	CurencyValid string  `json:"curencyValid" binding:"required,customCurrency"`
+	Id           int32   `json:"id,omitempty"`
 }
 
 func (s *Server) CreateProduct(ctx *gin.Context) {
 	var req CreateProductRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		fmt.Println(err.Error())
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 	args := db.CreateProductParams{
@@ -46,7 +47,7 @@ func (s *Server) CreateProduct(ctx *gin.Context) {
 	fmt.Println(product)
 	if err != nil {
 		fmt.Println(err.Error())
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 	ctx.JSON(http.StatusOK, product)
@@ -56,7 +57,7 @@ func (s *Server) UpdateProduct(ctx *gin.Context) {
 	var req CreateProductRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		fmt.Println(err.Error())
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 	args := db.UpdateProductsParams{
@@ -78,7 +79,7 @@ func (s *Server) UpdateProduct(ctx *gin.Context) {
 	fmt.Println(product)
 	if err != nil {
 		fmt.Println(err.Error())
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 	ctx.JSON(http.StatusOK, product)

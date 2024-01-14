@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 
@@ -24,7 +25,7 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 	var req CreateUserRequest
 	logger.Info("===>>>" + ctx.Request.RequestURI)
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 	}
 	arg := db.CreateUserParams{
 		FirstName:   req.FirstName,
@@ -35,10 +36,10 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		StatusID:    DefaultStatusId,
 	}
 	msg := fmt.Sprintf("arg %#+v", arg)
-	fmt.Println(msg)
+	logger.Info(msg)
 	user, err := s.store.CreateUser(ctx, arg)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 	logger.Info(fmt.Sprintf("%+v", user))
@@ -51,21 +52,51 @@ type getUserRequest struct {
 
 func (s *Server) GetUser(ctx *gin.Context) {
 	var req getUserRequest
-	logger.Info("===>>>" + ctx.Request.RequestURI)
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		fmt.Println(err.Error())
-		ctx.JSON(http.StatusBadRequest, err)
+		logger.Error(err.Error())
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	fmt.Println(req.ID)
-	User, err := s.store.GetUser(ctx, req.ID)
+	logger.Info(fmt.Sprintf("id is %+v", req.ID))
+	user, err := s.store.GetUser(ctx, req.ID)
 	if err != nil {
 		fmt.Println(err.Error())
-		ctx.JSON(http.StatusInternalServerError, err)
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-	logger.Info(fmt.Sprintf("%+v", User))
-	ctx.JSON(http.StatusOK, User)
+	logger.Info(fmt.Sprintf("%+v", user))
+	ctx.JSON(http.StatusOK, user)
+}
+
+type listUsersRequest struct {
+	PageId   int32 `form:"pageId" binding:"require,min=1"`
+	PageSize int32 `form:"pageSize" binding:"require,min=5,max=10"`
+}
+
+func (s *Server) GetListUser(ctx *gin.Context) {
+	var req listUsersRequest
+	if err := ctx.ShouldBindQuery(&req); err != nil {
+		logger.Error(err.Error())
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	arg := db.ListusersParams{
+		Limit:  req.PageSize,
+		Offset: (req.PageId - 1) * req.PageSize,
+	}
+	logger.Info(fmt.Sprintf("arg is %+v", arg))
+	users, err := s.store.Listusers(ctx, arg)
+	if err != nil {
+		logger.Error(err.Error())
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	logger.Info(fmt.Sprintf("%+v", users))
+	ctx.JSON(http.StatusOK, users)
 }
 
 // Ishu1708!

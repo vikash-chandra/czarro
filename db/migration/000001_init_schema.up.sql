@@ -111,8 +111,8 @@ ALTER TABLE "cz_products" ADD FOREIGN KEY ("currency_id") REFERENCES "cz_currenc
 
 INSERT INTO cz_roles (id, role_name, status_id, visible) VALUES 
 (100, 'user', 1, true),
-(300, 'washer', 1, true),
-(500, 'vender', 1, true),
+(300, 'detailer', 1, true),
+(500, 'vendor', 1, true),
 (700, 'supervisor', 1, true),
 (1000, 'admin', 1, true);
 
