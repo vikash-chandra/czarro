@@ -64,23 +64,24 @@ type CzStatus struct {
 }
 
 type CzUser struct {
-	ID          int64     `json:"id"`
-	UniqueID    uuid.UUID `json:"unique_id"`
-	RoleID      int32     `json:"role_id"`
-	FirstName   string    `json:"first_name"`
-	MiddleName  string    `json:"middle_name"`
-	LastName    string    `json:"last_name"`
-	Dob         time.Time `json:"dob"`
-	CountryCode int32     `json:"country_code"`
-	Phone       string    `json:"phone"`
-	Email       string    `json:"email"`
-	Salt        string    `json:"salt"`
-	Password    string    `json:"password"`
-	StatusID    int32     `json:"status_id"`
-	CreateUser  int64     `json:"create_user"`
-	ModifyUser  int64     `json:"modify_user"`
-	CreatedAt   time.Time `json:"created_at"`
-	ModifiedAt  time.Time `json:"modified_at"`
+	ID                int64     `json:"id"`
+	UniqueID          uuid.UUID `json:"unique_id"`
+	RoleID            int32     `json:"role_id"`
+	FirstName         string    `json:"first_name"`
+	MiddleName        string    `json:"middle_name"`
+	LastName          string    `json:"last_name"`
+	Dob               time.Time `json:"dob"`
+	CountryCode       int32     `json:"country_code"`
+	Phone             string    `json:"phone"`
+	Email             string    `json:"email"`
+	Salt              string    `json:"salt"`
+	Password          string    `json:"password"`
+	PasswordModifedAt time.Time `json:"password_modifed_at"`
+	StatusID          int32     `json:"status_id"`
+	CreateUser        int64     `json:"create_user"`
+	ModifyUser        int64     `json:"modify_user"`
+	CreatedAt         time.Time `json:"created_at"`
+	ModifiedAt        time.Time `json:"modified_at"`
 }
 
 type CzUsersAddress struct {

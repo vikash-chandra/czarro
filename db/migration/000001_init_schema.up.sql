@@ -48,6 +48,7 @@ CREATE TABLE "cz_users" (
   "email" varchar NOT NULL,
   "salt" varchar NOT NULL,
   "password" varchar NOT NULL,
+  "password_modifed_at" timestamptz NOT NULL DEFAULT '0001-01-01 00:00:00+00',
   "status_id" integer NOT NULL,
   "create_user" bigint NOT NULL DEFAULT 0,
   "modify_user" bigint NOT NULL DEFAULT 0,

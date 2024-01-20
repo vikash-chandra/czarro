@@ -27,7 +27,7 @@ INSERT INTO cz_users (
 ) VALUES (
   $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
 )
-RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at
+RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, password_modifed_at, status_id, create_user, modify_user, created_at, modified_at
 `
 
 type CreateUserParams struct {
@@ -74,6 +74,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CzUser,
 		&i.Email,
 		&i.Salt,
 		&i.Password,
+		&i.PasswordModifedAt,
 		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
@@ -94,7 +95,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM cz_users
+SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, password_modifed_at, status_id, create_user, modify_user, created_at, modified_at FROM cz_users
 WHERE id=$1 LIMIT 1
 `
 
@@ -114,6 +115,7 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (CzUser, error) {
 		&i.Email,
 		&i.Salt,
 		&i.Password,
+		&i.PasswordModifedAt,
 		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
@@ -124,7 +126,7 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (CzUser, error) {
 }
 
 const getUserForUpdate = `-- name: GetUserForUpdate :one
-SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM cz_users
+SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, password_modifed_at, status_id, create_user, modify_user, created_at, modified_at FROM cz_users
 WHERE id=$1 LIMIT 1
 FOR NO KEY UPDATE
 `
@@ -145,6 +147,7 @@ func (q *Queries) GetUserForUpdate(ctx context.Context, id int64) (CzUser, error
 		&i.Email,
 		&i.Salt,
 		&i.Password,
+		&i.PasswordModifedAt,
 		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,
@@ -155,7 +158,7 @@ func (q *Queries) GetUserForUpdate(ctx context.Context, id int64) (CzUser, error
 }
 
 const listusers = `-- name: Listusers :many
-SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at FROM cz_users
+SELECT id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, password_modifed_at, status_id, create_user, modify_user, created_at, modified_at FROM cz_users
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -188,6 +191,7 @@ func (q *Queries) Listusers(ctx context.Context, arg ListusersParams) ([]CzUser,
 			&i.Email,
 			&i.Salt,
 			&i.Password,
+			&i.PasswordModifedAt,
 			&i.StatusID,
 			&i.CreateUser,
 			&i.ModifyUser,
@@ -206,18 +210,20 @@ func (q *Queries) Listusers(ctx context.Context, arg ListusersParams) ([]CzUser,
 
 const updateUser = `-- name: UpdateUser :one
 UPDATE cz_users
-set password = $1
-WHERE id = $2
-RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, status_id, create_user, modify_user, created_at, modified_at
+set password = $1,
+password_modifed_at=$2
+WHERE id = $3
+RETURNING id, unique_id, role_id, first_name, middle_name, last_name, dob, country_code, phone, email, salt, password, password_modifed_at, status_id, create_user, modify_user, created_at, modified_at
 `
 
 type UpdateUserParams struct {
-	Password string `json:"password"`
-	ID       int64  `json:"id"`
+	Password          string    `json:"password"`
+	PasswordModifedAt time.Time `json:"password_modifed_at"`
+	ID                int64     `json:"id"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (CzUser, error) {
-	row := q.db.QueryRow(ctx, updateUser, arg.Password, arg.ID)
+	row := q.db.QueryRow(ctx, updateUser, arg.Password, arg.PasswordModifedAt, arg.ID)
 	var i CzUser
 	err := row.Scan(
 		&i.ID,
@@ -232,6 +238,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (CzUser,
 		&i.Email,
 		&i.Salt,
 		&i.Password,
+		&i.PasswordModifedAt,
 		&i.StatusID,
 		&i.CreateUser,
 		&i.ModifyUser,

@@ -29,8 +29,9 @@ OFFSET $2;
 
 -- name: UpdateUser :one
 UPDATE cz_users
-set password = $1
-WHERE id = $2
+set password = $1,
+password_modifed_at=$2
+WHERE id = $3
 RETURNING *;
 
 -- name: DeleteUser :exec
