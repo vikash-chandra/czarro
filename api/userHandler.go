@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	DefaultRoleId   int32 = 100
-	DefaultStatusId int32 = 1
+	DefaultRoleId   int32 = 100 // user
+	DefaultStatusId int32 = 1   // active
 )
 
 type CreateUserRequest struct {
