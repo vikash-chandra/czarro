@@ -111,12 +111,12 @@ func TestUpdateProductUsingForUpdate(t *testing.T) {
 		ModifiedAt:  time.Now().UTC(),
 		ID:          p1.ID,
 	}
-	udatedP1, err := testStore.UpdateProducts(context.Background(), arg)
+	updateP1, err := testStore.UpdateProducts(context.Background(), arg)
 	if err != nil {
 		log.Println(err)
 	}
 	require.NoError(t, err)
-	require.NotEqual(t, p1, udatedP1)
-	require.NotEqual(t, p1.Image, p2.Image)
-	require.NotEqual(t, p1.ModifiedAt, p2.ModifiedAt)
+	require.NotEqual(t, p2, updateP1)
+	require.NotEqual(t, p2.Image, updateP1.Image)
+	require.NotEqual(t, p2.ModifiedAt, updateP1.ModifiedAt)
 }

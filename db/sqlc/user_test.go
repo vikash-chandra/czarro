@@ -18,7 +18,7 @@ func createRandomUser(t *testing.T) CzUser {
 		MiddleName:  util.RandomString(5),
 		LastName:    util.RandomString(4),
 		Dob:         time.Date(util.RandomInt(1900, 2024), time.February, util.RandomInt(1, 31), 0, 0, 0, 0, time.Local),
-		CountryCode: int32(util.RandomInt(1, 1)),
+		CountryCode: int32(util.RandomInt(1, 10)),
 		Phone:       fmt.Sprintf("%d", util.RandomInt64(600000000, 999999999)),
 		Email:       util.RandomEmail(),
 		Password:    util.RandomString(8),
