@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	db "github.com/czarro/db/sqlc"
+	"github.com/czarro/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +24,7 @@ type CreateUserRequest struct {
 
 func (s *Server) CreateUser(ctx *gin.Context) {
 	var req CreateUserRequest
-	logger.Info("===>>>" + ctx.Request.RequestURI)
+	logger.Info(ctx.Request.RequestURI)
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 	}
@@ -42,7 +43,7 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	logger.Info(fmt.Sprintf("%+v", user))
+	logger.Debug(fmt.Sprintf("%+v", user))
 	ctx.JSON(http.StatusOK, user)
 }
 
@@ -60,7 +61,7 @@ func (s *Server) GetUser(ctx *gin.Context) {
 	logger.Info(fmt.Sprintf("id is %+v", req.ID))
 	user, err := s.store.GetUser(ctx, req.ID)
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
@@ -68,13 +69,13 @@ func (s *Server) GetUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-	logger.Info(fmt.Sprintf("%+v", user))
+	logger.Debug(fmt.Sprintf("%+v", user))
 	ctx.JSON(http.StatusOK, user)
 }
 
 type listUsersRequest struct {
-	PageId   int32 `form:"pageId" binding:"require,min=1"`
-	PageSize int32 `form:"pageSize" binding:"require,min=5,max=10"`
+	PageId   int32 `form:"pageId" binding:"required,min=1"`
+	PageSize int32 `form:"pageSize"`
 }
 
 func (s *Server) GetListUser(ctx *gin.Context) {
@@ -84,6 +85,7 @@ func (s *Server) GetListUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
+	logger.Info(fmt.Sprintf("req is %+v", req))
 	arg := db.ListusersParams{
 		Limit:  req.PageSize,
 		Offset: (req.PageId - 1) * req.PageSize,
@@ -95,7 +97,7 @@ func (s *Server) GetListUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-	logger.Info(fmt.Sprintf("%+v", users))
+	logger.Debug(fmt.Sprintf("%+v", users))
 	ctx.JSON(http.StatusOK, users)
 }
 

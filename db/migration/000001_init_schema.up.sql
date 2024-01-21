@@ -80,7 +80,7 @@ CREATE TABLE "cz_products" (
   "sms_noti" boolean NOT NULL DEFAULT false,
   "email_noti" boolean NOT NULL DEFAULT false,
   "call_noti" boolean NOT NULL DEFAULT false,
-  "image" varchar(100) NOT NULL DEFAULT '',
+  "image" text NOT NULL DEFAULT '',
   "currency_id" integer NOT NULL,
   "price" float NOT NULL DEFAULT 0,
   "status_id" integer NOT NULL DEFAULT 0,
