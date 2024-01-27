@@ -47,7 +47,7 @@ func (s *Server) CreateProduct(ctx *gin.Context) {
 	logger.Info(fmt.Sprintf("arg %+v", args))
 	product, err := s.store.CreateProduct(ctx, args)
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
@@ -59,7 +59,7 @@ func (s *Server) CreateProduct(ctx *gin.Context) {
 func (s *Server) UpdateProduct(ctx *gin.Context) {
 	var req CreateProductRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
@@ -81,7 +81,7 @@ func (s *Server) UpdateProduct(ctx *gin.Context) {
 	product, err := s.store.UpdateProducts(ctx, args)
 	fmt.Println(product)
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
@@ -93,7 +93,7 @@ func (s *Server) UpdateProduct(ctx *gin.Context) {
 func (s *Server) DeleteProduct(ctx *gin.Context) {
 	var req CreateProductRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
@@ -115,7 +115,7 @@ func (s *Server) DeleteProduct(ctx *gin.Context) {
 	product, err := s.store.UpdateProducts(ctx, args)
 	fmt.Println(product)
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}

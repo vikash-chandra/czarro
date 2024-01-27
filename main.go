@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/czarro/api"
@@ -16,12 +15,12 @@ import (
 func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatal(err)
 	}
 	logger.CZLoggerInit(config)
 	connPool, err := pgxpool.New(context.Background(), config.DBSource)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatal(err)
 	}
 	queries := db.NewStore(connPool)
 	server := api.NewServer(queries, config)

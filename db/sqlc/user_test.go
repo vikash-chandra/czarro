@@ -12,6 +12,8 @@ import (
 )
 
 func createRandomUser(t *testing.T) CzUser {
+	hashedPassword, err := util.HashPassword(util.RandomString(6))
+	require.NoError(t, err)
 	arg := CreateUserParams{
 		RoleID:      100,
 		FirstName:   util.RandomString(10),
@@ -21,7 +23,7 @@ func createRandomUser(t *testing.T) CzUser {
 		CountryCode: int32(util.RandomInt(1, 10)),
 		Phone:       fmt.Sprintf("%d", util.RandomInt64(600000000, 999999999)),
 		Email:       util.RandomEmail(),
-		Password:    util.RandomString(8),
+		Password:    hashedPassword,
 		StatusID:    int32(util.RandomInt(1, 3)),
 		CreateUser:  util.RandomInt64(1, 1000000),
 	}

@@ -44,7 +44,7 @@ CREATE TABLE "cz_users" (
   "last_name" varchar NOT NULL,
   "dob" timestamptz NOT NULL DEFAULT '0001-01-01',
   "country_code" integer NOT NULL,
-  "phone" varchar NOT NULL,
+  "phone" varchar NOT NULL UNIQUE,
   "email" varchar NOT NULL,
   "salt" varchar NOT NULL,
   "password" varchar NOT NULL,

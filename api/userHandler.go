@@ -7,7 +7,9 @@ import (
 
 	db "github.com/czarro/db/sqlc"
 	"github.com/czarro/logger"
+	"github.com/czarro/util"
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 )
 
 const (
@@ -20,6 +22,8 @@ type CreateUserRequest struct {
 	LastName    string `json:"lastName" binding:"required,alphanum"`
 	Phone       string `json:"phone" binding:"required"`
 	CountryCode int32  `json:"countryCode" binding:"required"`
+	Password    string `json:"password"`
+	Otp         string `json:"otp" binding:"required"`
 }
 
 func (s *Server) CreateUser(ctx *gin.Context) {
@@ -27,6 +31,7 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 	logger.Info(ctx.Request.RequestURI)
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
 	}
 	arg := db.CreateUserParams{
 		FirstName:   req.FirstName,
@@ -36,10 +41,24 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		RoleID:      DefaultRoleId,
 		StatusID:    DefaultStatusId,
 	}
+	if len(req.Password) > 0 {
+		hashedPassword, err := util.HashPassword(req.Password)
+		if err != nil {
+			ctx.JSON(http.StatusUnprocessableEntity, errorResponse(err))
+		}
+		arg.Password = hashedPassword
+	}
 	msg := fmt.Sprintf("arg %#+v", arg)
-	logger.Info(msg)
+	logger.Debug(msg)
 	user, err := s.store.CreateUser(ctx, arg)
 	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok {
+			switch pqErr.Code.Name() {
+			case "foreign_key_voilation", "unique_voilation":
+				ctx.JSON(http.StatusForbidden, errorResponse(err))
+				return
+			}
+		}
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
