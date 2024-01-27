@@ -66,9 +66,11 @@ func TestGetListUser(t *testing.T) {
 }
 
 func TestUpdateUser(t *testing.T) {
+	hashedPassword, err := util.HashPassword(util.RandomString(6))
+	require.NoError(t, err)
 	User1 := createRandomUser(t)
 	arg := UpdateUserParams{
-		Password: util.RandomString(10),
+		Password: hashedPassword,
 		ID:       User1.ID,
 	}
 	User, err := testStore.UpdateUser(context.Background(), arg)
@@ -79,9 +81,11 @@ func TestUpdateUser(t *testing.T) {
 
 func TestUpdateUserUsingForUpdate(t *testing.T) {
 	var err error
+	hashedPassword, err := util.HashPassword(util.RandomString(6))
+	require.NoError(t, err)
 	User := createRandomUser(t)
 	arg := UpdateUserParams{
-		Password: util.RandomString(10),
+		Password: hashedPassword,
 		ID:       User.ID,
 	}
 	User, err = testStore.GetUserForUpdate(context.Background(), User.ID)
