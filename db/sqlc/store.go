@@ -12,6 +12,7 @@ import (
 // Store ...
 type Store interface {
 	Querier
+	// ExecTx(context.Context, func(*Queries) error) error
 }
 
 // SQLStore provides all functions to execute db queries and transaction

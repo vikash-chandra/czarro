@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"time"
 
 	db "github.com/czarro/db/sqlc"
 	"github.com/czarro/logger"
@@ -26,10 +27,28 @@ type CreateUserRequest struct {
 	Otp         string `json:"otp" binding:"required"`
 }
 
+type userResponse struct {
+	FirstName   string    `json:"firstName"`
+	LastName    string    `json:"lastName"`
+	Phone       string    `json:"phone"`
+	CountryCode int32     `json:"countryCode"`
+	CreatedAt   time.Time `json:"createdAt"`
+}
+
+func newUserResponse(user db.CzUser) userResponse {
+	return userResponse{
+		FirstName:   user.FirstName,
+		LastName:    user.LastName,
+		Phone:       user.Phone,
+		CountryCode: user.CountryCode,
+		CreatedAt:   user.CreatedAt,
+	}
+}
 func (s *Server) CreateUser(ctx *gin.Context) {
 	var req CreateUserRequest
 	logger.Info(ctx.Request.RequestURI)
 	if err := ctx.ShouldBindJSON(&req); err != nil {
+		logger.Error(err.Error())
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
@@ -63,7 +82,8 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		return
 	}
 	logger.Debug(fmt.Sprintf("%+v", user))
-	ctx.JSON(http.StatusOK, user)
+	rsp := newUserResponse(user)
+	ctx.JSON(http.StatusOK, rsp)
 }
 
 type getUserRequest struct {
