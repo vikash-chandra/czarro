@@ -89,7 +89,6 @@ func TestCreateUserAPI(t *testing.T) {
 	}
 	for i := range testCases {
 		tc := testCases[i]
-
 		t.Run(tc.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
@@ -120,7 +119,7 @@ func randomUser(t *testing.T) (user db.CzUser, password string) {
 	require.NoError(t, err)
 
 	user = db.CzUser{
-		RoleID:      100,
+		RoleID:      DefaultRoleId,
 		FirstName:   util.RandomString(10),
 		MiddleName:  util.RandomString(5),
 		LastName:    util.RandomString(4),

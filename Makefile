@@ -40,5 +40,5 @@ mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/czarro/db/sqlc Store
 
 test:
-	go test -v -cover ./...
+	go clean -testcache && go test -v -cover ./...
 .PHONY: sqlcinstall postgres createdb dropdb migrate migrateup migratedown migrateup1 migratedown1 sqlc test mysql mysqlcreatedb mysqldropdb mock
