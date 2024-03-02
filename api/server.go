@@ -31,6 +31,8 @@ func NewServer(store db.Store, config util.Config) *Server {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); !ok {
 		v.RegisterValidation("customCurrency", validCurrency)
 	}
+	// https://www.youtube.com/watch?v=GguJODC2cvI
+
 	logger.Info("*********" + apiPath + "*********")
 	router.POST(apiPath+"/users", server.CreateUser)
 	router.GET(apiPath+"/users", server.GetListUser)
