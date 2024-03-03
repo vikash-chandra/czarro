@@ -39,6 +39,10 @@ func NewServer(store db.Store, config util.Config) *Server {
 	router.PUT(apiPath+"/products", server.UpdateProduct)
 	router.GET(apiPath+"/products", server.GetListProduct)
 	router.GET(apiPath+"/products/:id", server.GetProduct)
+	router.POST(apiPath+"/vendors", server.CreateVendor)
+	router.PUT(apiPath+"/vendors", server.UpdateVendor)
+	router.GET(apiPath+"/vendors", server.GetListVendor)
+	router.GET(apiPath+"/vendors/:id", server.GetVendor)
 
 	server.router = router
 	return server

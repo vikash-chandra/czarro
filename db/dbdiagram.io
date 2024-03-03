@@ -104,3 +104,71 @@ Table cz_products {
     id
   }
 }
+
+Table cz_vendors {
+  id bigserial [primary key]
+  vendor_id uuid [not null]
+  vendor_name varchar(150) [not null]
+  registration_number varchar(50) [not null]
+  website_url varchar(100) 
+  contact_email varchar(100) [not null]
+  contact_number varchar(20) [not null]
+  salt varchar [not null]
+  password varchar [not null]
+  country_code integer [not null,ref: > cz_country.id]
+  status_id integer [not null, ref: > cz_status.id]
+  create_user bigint [not null,default:0]
+  modify_user bigint [not null,default:0]
+  created_at timestamptz [not null, default:`now()`]
+  modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
+
+  Indexes {
+    vendor_id
+    vendor_name
+  }
+}
+
+Table cz_vendors_shops {
+  id bigserial [primary key]
+  vendor_id bigserial [not null, ref: > cz_vendors.id]
+  shop_name varchar(200) [not null]
+  address varchar(250) [not null]
+  city varchar(100) [not null]
+  state varchar(100) [not null]
+  postal_code varchar(20) [not null]
+  country_code integer [not null,ref: > cz_country.id]
+  location varchar(100) [not null]
+  create_user bigint [not null,default:0]
+  modify_user bigint [not null,default:0]
+  created_at timestamptz [not null, default:`now()`]
+  modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
+
+  Indexes {
+    shop_name
+    city
+  }
+}
+
+Table cz_vendors_workers {
+  id bigserial [primary key]
+  worker_id uuid [not null]
+  shop_id bigserial [not null, ref: > cz_vendors_shops.id]
+  first_name varchar(50) [not null]
+  middle_name varchar(50) 
+  last_name varchar(50) [not null]
+  designation varchar(50) [not null]
+  contact_number varchar(20) [not null]
+  contact_email varchar(100)
+  adhaar_card_number varchar(20) [not null]
+  dob timestamptz [not null, default:'0001-01-01']
+  create_user bigint [not null,default:0]
+  modify_user bigint [not null,default:0]
+  created_at timestamptz [not null, default:`now()`]
+  modified_at timestamptz [not null, default:'0001-01-01 00:00:00+00']
+  //CONSTRAINT fk_shop_id FOREIGN KEY (shop_id) REFERENCES shops(shop_id)
+
+  Indexes {
+    worker_id
+    contact_number
+  }
+}
