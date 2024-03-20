@@ -113,7 +113,8 @@ func (s *Server) GetUser(ctx *gin.Context) {
 }
 
 type listUsersRequest struct {
-	PageId   int32 `form:"pageId" binding:"required,min=1"`
+	// PageId   int32 `form:"pageId" binding:"required,min=1"`
+	PageId   int32 `form:"pageId"`
 	PageSize int32 `form:"pageSize"`
 }
 
@@ -141,6 +142,7 @@ func (s *Server) GetListUser(ctx *gin.Context) {
 }
 
 // Ishu1708!
+// Ishu1708!@
 // wp_termmeta product
 // wp_users
 // wp_yoast_indexable

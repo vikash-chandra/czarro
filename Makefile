@@ -2,7 +2,8 @@ DB_URL=postgresql://root:secret@localhost:5432/carzorro?sslmode=disable
 MYSQL_URL=mysql://root@secret@localhost:3306/carzorro?sslmode=disable
 
 sqlcinstall:
-	sudo snap install sqlc
+	# sudo snap install sqlc
+	brew install sqlc
 mysql:
 	docker run --name mysql -p 3306 -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=carzorro -d mysql:latest
 czmysql:
