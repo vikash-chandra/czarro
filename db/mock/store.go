@@ -18,6 +18,36 @@ type MockStore struct {
 	recorder *MockStoreMockRecorder
 }
 
+// CreateVendor implements db.Store.
+func (*MockStore) CreateVendor(ctx context.Context, arg db.CreateVendorParams) (db.CzVendor, error) {
+	panic("unimplemented")
+}
+
+// DeleteVendor implements db.Store.
+func (*MockStore) DeleteVendor(ctx context.Context, id int64) error {
+	panic("unimplemented")
+}
+
+// GetVendor implements db.Store.
+func (*MockStore) GetVendor(ctx context.Context, id int64) (db.CzVendor, error) {
+	panic("unimplemented")
+}
+
+// GetVendorForUpdate implements db.Store.
+func (*MockStore) GetVendorForUpdate(ctx context.Context, id int64) (db.CzVendor, error) {
+	panic("unimplemented")
+}
+
+// ListVendors implements db.Store.
+func (*MockStore) ListVendors(ctx context.Context, arg db.ListVendorsParams) ([]db.CzVendor, error) {
+	panic("unimplemented")
+}
+
+// UpdateVendor implements db.Store.
+func (*MockStore) UpdateVendor(ctx context.Context, arg db.UpdateVendorParams) (db.CzVendor, error) {
+	panic("unimplemented")
+}
+
 // MockStoreMockRecorder is the mock recorder for MockStore.
 type MockStoreMockRecorder struct {
 	mock *MockStore

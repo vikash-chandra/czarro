@@ -108,14 +108,8 @@ Table cz_products {
 Table cz_vendors {
   id bigserial [primary key]
   vendor_id uuid [not null]
-  vendor_name varchar(150) [not null]
-  registration_number varchar(50) [not null]
-  website_url varchar(100) 
-  contact_email varchar(100) [not null]
-  contact_number varchar(20) [not null]
-  salt varchar [not null]
-  password varchar [not null]
-  country_code integer [not null,ref: > cz_country.id]
+  reg_num_licence varchar(50) [not null]
+  user_id integer [not null, ref: > cz_users.id]
   status_id integer [not null, ref: > cz_status.id]
   create_user bigint [not null,default:0]
   modify_user bigint [not null,default:0]
@@ -124,7 +118,6 @@ Table cz_vendors {
 
   Indexes {
     vendor_id
-    vendor_name
   }
 }
 
